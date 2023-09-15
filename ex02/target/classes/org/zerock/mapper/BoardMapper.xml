@@ -16,6 +16,13 @@
 		insert into tbl_board(bno, title, content, writer) values(seq_board.nextval, #{title}, #{content}, #{writer})
 	</insert>
 	
+	<insert id="insertSelectKey">
+		<selectKey keyProperty = "bno" order="BEFORE" resultType="long">
+			select seq_Board.nextval from dual
+		</selectKey>
+		insert into tbl_board(bno, title, content, writer) values(#{bno}, #{title}, #{content}, #{writer})
+	</insert>
+	
 	<update id="update">
 		update tbl_board set title = #{title}, content = #{content}, updatedate = sysdate where bno = #{bno}
 	</update>
@@ -23,5 +30,48 @@
 	<delete id="delete">
 		delete from tbl_board where bno = #{bno}
 	</delete>
+	
+	<select id="rank" resultType = "org.zerock.domain.RankVO">
+		<![CDATA[
+			select *
+			from (select writer, count(writer) counter
+		        from tbl_board
+		        group by writer
+		        order by counter DESC)
+			where ROWNUM <= 5
+		]]>
+	</select>
+	
+	<select id="count" resultType = "long">
+		select count(bno) from tbl_board
+	</select>
+	
+	<select id="lastBoard" resultType = "org.zerock.domain.BoardVO">
+		<![CDATA[
+			select *
+			from(select * from tbl_board 
+			     order by updatedate desc)
+			where rownum <6
+		]]>
+	</select>
+	
+	<select id="postCount" resultType="org.zerock.domain.PostAtTimeVO">
+		select "time", count("time") "count"
+		from(select to_char(regdate, 'hh24') "time"
+		    from tbl_board)
+		group by "time"
+		order by "time"
+	</select>
+	
+<!-- 	<select id="kingUser" resultType="string"> -->
+<!-- 		select * -->
+<!-- 		from(select writer, count(writer)  -->
+<!-- 		        from tbl_board -->
+<!-- 		        group by writer -->
+<!-- 		        having count(writer) = (select max(count(writer)) -->
+<!-- 		                                from tbl_board -->
+<!-- 		                                group by writer)) -->
+<!-- 		where rownum = 1; -->
+<!-- 	</select> -->
 	
 </mapper>

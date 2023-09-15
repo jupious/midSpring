@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.kwak.mapper.TodoMapper">	
+	<!-- id = 메소드 이름 -->
+	<select id="getList" resultType = "edu.kwak.domain.TodoVO">	<!-- 리스트 한 행의 반환타입지정 -->
+		select * from todo order by no
+	</select>
+	
+	<select id = "todayList" resultType = "edu.kwak.domain.TodoVO">
+		select * from todo where date_format(duedate,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
+	</select>
+	
+	
+	<select id="count" resultType = "long">
+		select  count(*) from todo
+	</select>
+	
+	<insert id="insert">
+		insert into todo (title,duedate) values (#{title}, #{duedate})
+	</insert>
+	
+	
+</mapper>

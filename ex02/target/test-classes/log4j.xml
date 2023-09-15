@@ -52,6 +52,9 @@
 		<level value="warn" />
 	</logger>
 	
+	<logger name="jdbc.sqlonly">
+		<level value="warn" />
+	</logger>
 
 
 	<!-- Root Logger -->
