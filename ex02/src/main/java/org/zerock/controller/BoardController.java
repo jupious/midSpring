@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.domain.BoardVO;
 import org.zerock.service.BoardService;
 
@@ -26,16 +27,55 @@ public class BoardController {
 		model.addAttribute("list",bs.getList());
 	}
 	
-	@PostMapping("register")
-	public void register(BoardVO vo) {
-		log.info("========================= register URL요청 =========================");
+	
+	@PostMapping("register")	//등록처리(모든항목-BoardVO) board/register(post) <- 입력화면(get)
+	public String register(BoardVO vo, RedirectAttributes rttr) {
+		log.info("========================= register Post URL요청 =========================");
 		bs.register(vo);
+		rttr.addFlashAttribute("result", vo.getBno()); //작성된 글번호 한번만 전송
+		return "redirect:/board/list";	//리다이렉트가 없으면 jsp 있으면 요청
 	}
 	
-	@GetMapping("get")
+	@GetMapping({"register", "remove"})
+	public void inputView() {
+		log.info("입력화면 요청됨");
+	}
+	
+	@GetMapping("modify")
+	public void modify(Long bno, Model model) {
+		model.addAttribute("board", bs.get(bno));
+	}
+	
+	
+	@GetMapping("get")	//읽기(글번호-bno) board/get(get)
 	public void get(Long bno, Model model) {
 		log.info("========================= get URL요청 =========================");
-		model.addAttribute(bs.get(bno));
+		model.addAttribute("board",bs.get(bno));
 	}
+	
+	
+	@PostMapping("remove")	//삭제(글번호-bno) board/remove(post) <-입력화면(get)
+	public String remove(Long bno, RedirectAttributes rttr) {
+		log.info("========================= remove Post URL요청 =========================");
+		if(bs.remove(bno)) {	//이상이 없다면 데이터 전송
+			rttr.addFlashAttribute("result","remove success");
+		}
+		return "redirect:/board/list";
+	}
+
+	
+	
+	@PostMapping("modify")	//수정(모든항목-BoardVO) board/modify(post) <-입력화면(get)
+	public String modify(BoardVO vo, RedirectAttributes rttr) {
+		log.info("========================= modify Post URL요청 =========================");
+		if(bs.modify(vo)) {
+			rttr.addFlashAttribute("result","modify success");
+		}
+		return "redirect:/board/list";
+		//return "redirect:/board/get?bno="+vo.getBno();
+	}
+	
+	
+
 	
 }

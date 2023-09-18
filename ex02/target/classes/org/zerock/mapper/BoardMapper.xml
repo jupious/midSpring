@@ -5,7 +5,7 @@
 <mapper namespace="org.zerock.mapper.BoardMapper">	<!-- namespace - 해당 인터페이스를 매핑 -->
 	<!-- id = 메소드 이름 -->
 	<select id="getList" resultType = "org.zerock.domain.BoardVO">	<!-- 리스트 한 행의 반환타입지정 -->
-		select * from tbl_board
+		select * from tbl_board order by bno desc
 	</select>
 	
 	<select id = "read" resultType = "org.zerock.domain.BoardVO">

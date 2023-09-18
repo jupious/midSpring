@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.zerock.domain.BoardVO;
 
 import lombok.extern.log4j.Log4j;
 
@@ -37,6 +38,50 @@ public class BoardControllerTest {
 				);
 	}
 	@Test
-	public void testRegist() {
+	public void testRegister() throws Exception {
+		log.info("url Regist 요청 테스트" +
+		mockMvc.perform(MockMvcRequestBuilders.post("/board/register")
+				.param("title", "registControllerTest")
+				.param("content", "내용임")
+				.param("writer", "작성자1"))
+			.andReturn().getModelAndView().getViewName());
+	}
+	
+	@Test
+	public void testGet() throws Exception {
+		log.info("url Get 요청 테스트" + 
+		mockMvc.perform(MockMvcRequestBuilders.get("/board/get")
+				.param("bno", "3"))
+			.andReturn().getModelAndView().getModelMap());
+	}
+	
+	@Test
+	public void testRemove() throws Exception {
+		log.info("url Remove 요청 테스트" +
+		mockMvc.perform(MockMvcRequestBuilders.post("/board/remove")
+				.param("bno", "43"))
+			.andReturn().getModelAndView().getViewName());
+	}
+	
+	@Test
+	public void testModify() throws Exception {
+		log.info("url Modify 요청 테스트" +
+		mockMvc.perform(MockMvcRequestBuilders.post("/board/modify")
+				.param("bno", "3")
+				.param("title","modifyControllerTest")
+				.param("content", "컨트롤러가 수정함 내가봄"))
+			.andReturn().getModelAndView().getModelMap());
+	}
+	
+	@Test
+	public void testRegi() throws Exception {
+		log.info("register Get : "+mockMvc.perform(MockMvcRequestBuilders.get("/board/register")).andReturn().getModelAndView().getViewName());
+		
+	}
+	
+	@Test
+	public void testRm() throws Exception {
+		log.info("remove Get : "+mockMvc.perform(MockMvcRequestBuilders.get("/board/remove")).andReturn().getModelAndView().getViewName());
+		
 	}
 }

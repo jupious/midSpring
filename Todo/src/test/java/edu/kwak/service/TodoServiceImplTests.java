@@ -46,7 +46,7 @@ public class TodoServiceImplTests {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		
 		vo.setTitle("inputTodo테스트~~~~~~~~~");
-		vo.setDuedate(df.parse("2023-09-28"));
+		vo.setDuedate(df.parse("2023-09-18"));
 		log.info("삽입 : " + ts.inputTodo(vo));
 		
 	}
