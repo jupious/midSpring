@@ -50,6 +50,7 @@
                                        <a href = "modify?bno=${board.bno}"><button class="btn btn-outline btn-warning">수정</button></a>
                                        <a href = "list"><button class="btn btn-outline btn-primary">목록</button></a>
                                 </div>
+                                
                                 <!-- /.col-lg-6 (nested) -->
                               
                                 <!-- /.col-lg-6 (nested) -->
@@ -69,17 +70,8 @@
     </div>
     <!-- /#wrapper -->
 
-    <!-- jQuery -->
-    <script src="/resources/vendor/jquery/jquery.min.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="/resources/vendor/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="/resources/vendor/metisMenu/metisMenu.min.js"></script>
-
-    <!-- Custom Theme JavaScript -->
-    <script src="/resources/dist/js/sb-admin-2.js"></script>
+         <!-- footer 파일 넣기 -->
+<%@ include file = "../includes/footer.jsp" %>
 
 </body>
 

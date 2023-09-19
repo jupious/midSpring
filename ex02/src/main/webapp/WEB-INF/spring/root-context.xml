@@ -21,8 +21,8 @@
 <!-- 	<property name = "jdbcUrl" value = "jdbc:oracle:thin:@127.0.0.1:1521:xe" ></property> -->
 	<property name = "driverClassName" value = "net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
 	<property name = "jdbcUrl" value = "jdbc:log4jdbc:oracle:thin:@localhost:1521:xe" ></property>
-	<property name = "username" value = "aaa"></property>
-	<property name = "password" value = "bbb"></property>
+	<property name = "username" value = "book_ex"></property>
+	<property name = "password" value = "book_ex"></property>
 	</bean>
 	<!-- HidariDataSource dataSource = new HikariDataSource(hikariConfig) -->
 	<bean id = "dataSource" class = "com.zaxxer.hikari.HikariDataSource" >	<!-- destry-mehod - 해당 객체를 닫을때 쓸 메소드 -->

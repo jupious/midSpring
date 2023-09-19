@@ -84,4 +84,10 @@ public class BoardControllerTest {
 		log.info("remove Get : "+mockMvc.perform(MockMvcRequestBuilders.get("/board/remove")).andReturn().getModelAndView().getViewName());
 		
 	}
+	@Test
+	public void testPat() throws Exception {
+		log.info("url리스트 요청결과 모델데이터" +		//get으로 요청해라            모델의 뷰를 가져와라/ 보낸 데이터확인
+				mockMvc.perform(MockMvcRequestBuilders.get("/board/charts")).andReturn().getModelAndView().getModelMap()
+				);
+	}
 }

@@ -8,6 +8,15 @@
 		select * from tbl_board order by bno desc
 	</select>
 	
+	<select id="getListWithPaging" resultType = "org.zerock.domain.BoardVO">	<!-- 리스트 한 행의 반환타입지정 -->
+		<![CDATA[
+		select bno,title,regdate, updatedate
+		from(select /*+index_desc(tbl_board tbl_board_pk)*/
+		            rownum rn,bno,title,regdate, updatedate from tbl_board where rownum <= (#{amount} * #{pageNum}))
+		where rn > (#{pageNum} - 1) * #{amount} and rn <= (#{amount} * #{pageNum})
+		]]>
+	</select>
+	
 	<select id = "read" resultType = "org.zerock.domain.BoardVO">
 		select * from TBL_BOARD where bno = #{bno}
 	</select>
@@ -42,6 +51,20 @@
 		]]>
 	</select>
 	
+	<select id="rankAll" resultType = "org.zerock.domain.RankVO">
+		select writer, count(writer) counter
+		        from tbl_board
+		        group by writer
+		        order by counter DESC
+	</select>
+	
+	<select id = "avgPost" resultType = "double">
+		select avg(counter)
+		from(select writer, count(writer) counter
+		        from tbl_board
+		        group by writer)
+	</select>
+	
 	<select id="count" resultType = "long">
 		select count(bno) from tbl_board
 	</select>
@@ -61,6 +84,22 @@
 		    from tbl_board)
 		group by "time"
 		order by "time"
+	</select>
+	
+	<select id = "postCountDay" resultType="org.zerock.domain.PostAtTimeVO">
+		select "day", count("day") "count"
+		from(select to_char(regdate, 'day') "day"
+		from tbl_board)
+		group by "day"
+		order by CASE "day" 
+		    WHEN '월요일' THEN 1
+		    WHEN '화요일' THEN 2
+		    WHEN '수요일' THEN 3
+		    WHEN '목요일' THEN 4
+		    WHEN '금요일' THEN 5
+		    WHEN '토요일' THEN 6
+		    WHEN '일요일' THEN 7
+		    END ASC
 	</select>
 	
 <!-- 	<select id="kingUser" resultType="string"> -->

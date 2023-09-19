@@ -43,6 +43,25 @@
                                 </c:forEach>                                  
                                 </tbody>
                             </table>
+                            <div class = "pull-right">
+                            	<ul class = "pagination">
+		                            <c:if test = "${pageMaker.prev}" >
+		                            	<li class = "paginate_button">
+		                            		<a href = "list?pageNum=${pageMaker.startPage-1}">이전</a>
+		                            	</li>
+		                            </c:if>
+		                            <c:forEach begin = "${pageMaker.startPage}" end = "${pageMaker.endPage}" var = "num">
+		                            	<li class = "paginate_button">
+		                            		<a href = "list?pageNum=${num}&amount=${pageMaker.cri.amount}" class = "pButton" id = "${num}">${num}</a>
+		                            	</li>
+		                            </c:forEach>
+		                            <c:if test = "${pageMaker.next}" >
+		                            	<li class = "paginate_button">
+		                            		<a href = "list?pageNum=${pageMaker.endPage+1}">다음</a>
+		                            	</li>
+		                            </c:if>
+	                            </ul>
+                            </div>
                         </div>
                         <!-- /.panel-body -->
                     </div>
@@ -79,36 +98,37 @@
 	</div>
                             <!-- /.modal -->
 
-    <!-- jQuery -->
-    <script src="/resources/vendor/jquery/jquery.min.js">
-    </script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="/resources/vendor/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="/resources/vendor/metisMenu/metisMenu.min.js"></script>
-
-    <!-- Custom Theme JavaScript -->
-    <script src="/resources/dist/js/sb-admin-2.js"></script>
+      <!-- footer 파일 넣기 -->
+<%@ include file = "../includes/footer.jsp" %>
 
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
     <script>
-	    var result = "${result}";
+	    var status = "${status}";
+	    var bno = "${result}";
 	    var mText = $('#modal-text');
-	    console.log(result);
-	    if(result != ""){
-	    	if(result === "modify success"){
-	    		mText.append("게시글이 수정되었습니다.");
-	    	}else if(result === "remove success"){
-	    		mText.append("게시글이 삭제되었습니다.")
+	    console.log(status);
+	    if(status != ""){
+	    	if(status === "modify success"){
+	    		mText.html(bno + "번 게시글이 수정되었습니다.");
+	    	}else if(status === "remove success"){
+	    		mText.html(bno + "번 게시글이 삭제되었습니다.")
+	    	}else if(status === "register success"){
+	    		mText.html(bno+"번 게시글이 등록되었습니다.")
 	    	}else{
-	    		mText.html(result+"번 게시글이 등록되었습니다.")
+	    		mText.html("몬가.. 잘못됐음..")
 	    	}
 	    	
-	    	$('#myModal').modal('show');
-	    	mText.emplty();
+	    	$('#myModal').modal('show');	    
 	    }
+	</script>
+	<script>
+		$(function(){
+			var pnum = "${param.pageNum}";
+			if(pnum == ""){
+				pnum = 1;
+			}
+			$('#'+pnum).parent().attr("class", "active").change();			
+		})
 	</script>
 
 

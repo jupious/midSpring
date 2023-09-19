@@ -80,11 +80,11 @@
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> 차트<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="/resources/pages/flot.html">Flot Charts</a>
+                                    <a href="charts">Google Charts</a>
                                 </li>
-                                <li>
-                                    <a href="/resources/pages/morris.html">Morris.js Charts</a>
-                                </li>
+<!--                                 <li> -->
+<!--                                     <a href="/resources/pages/morris.html">Morris.js Charts</a> -->
+<!--                                 </li> -->
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>

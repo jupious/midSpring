@@ -3,6 +3,7 @@ package org.zerock.service;
 import java.util.List;
 
 import org.zerock.domain.BoardVO;
+import org.zerock.domain.Criteria;
 import org.zerock.domain.PostAtTimeVO;
 import org.zerock.domain.RankVO;
 
@@ -10,7 +11,7 @@ public interface BoardService {
 	//사용자 관점의 서비스
 	
 	//1. 글 목록
-	List<BoardVO> getList();
+	List<BoardVO> getList(Criteria cri);
 	
 	//2. 글 작성
 	void register(BoardVO vo);
@@ -35,4 +36,13 @@ public interface BoardService {
 	
 	//9. 시간대별 글 개수 통계(작성일 기준) 00 5 / 1 1
 	List<PostAtTimeVO> postCount();
+	
+	//10. 작성글 수 랭킹 전체
+	List<RankVO> getRankAll();
+	
+	//11. 평균 글 작성수
+	double getAvg();
+	
+	//12. 작성글수 요일통계
+	List<PostAtTimeVO> postCountDay();
 }

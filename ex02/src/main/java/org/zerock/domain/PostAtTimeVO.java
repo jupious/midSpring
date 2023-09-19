@@ -8,9 +8,9 @@ import lombok.Data;
 @Data
 public class PostAtTimeVO {
 
-	private String time;
+	private Integer time;
 
 	private Long count;
 	
-	
+	private String day;
 }

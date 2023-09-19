@@ -50,7 +50,9 @@
                                         </div>
                                       
                                         <button type="submit" class="btn btn-default">작성</button>
+                                        <button type ="button" class = "btn btn-default" id = "cancle">취소</button>
                                     </form>
+                                    
                                 </div>
                                 <!-- /.col-lg-6 (nested) -->
                               
@@ -70,19 +72,44 @@
 
     </div>
     <!-- /#wrapper -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    	<div class="modal-dialog">
+        	<div class="modal-content">
+            	<div class="modal-header">
+                 	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    	<h4 class="modal-title" id="myModalLabel">취소 하시겠습니까?</h4>
+                        	</div>
+                            	<div class="modal-body" id = "modal-text">
+                            		현재까지 작성한 내용은 저장되지 않습니다.
+                                </div>
+                           	<div class="modal-footer">
+                        <button type="button" class="btn btn-default" id = "ok">확인</button>
+                        <button type="button" class="btn btn-default" id = "mcancle">취소</button>
+                     </div>
+                 </div>
+              <!-- /.modal-content -->
+        	</div>
+    	<!-- /.modal-dialog -->
+	</div>
 
-    <!-- jQuery -->
-    <script src="/resources/vendor/jquery/jquery.min.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="/resources/vendor/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="/resources/vendor/metisMenu/metisMenu.min.js"></script>
-
-    <!-- Custom Theme JavaScript -->
-    <script src="/resources/dist/js/sb-admin-2.js"></script>
-
+      <!-- footer 파일 넣기 -->
+<%@ include file = "../includes/footer.jsp" %>
+	
+	<script>
+		$(function (){
+			$('#cancle').on("click",function(){
+				$('#myModal').modal('show');	
+			})
+			$('#ok').on("click",function(){
+				self.location = "list";
+				return;
+			})
+			$('#mcancle').on("click",function(){
+				$('#myModal').modal('hide');
+				return;
+			})
+		})
+	</script>
 </body>
 
 </html>

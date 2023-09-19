@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.domain.BoardVO;
+import org.zerock.domain.Criteria;
+import org.zerock.domain.PageDTO;
 import org.zerock.service.BoardService;
 
 import lombok.AllArgsConstructor;
@@ -22,9 +24,10 @@ public class BoardController {
 	private BoardService bs;	//생성자 주입
 	
 	@GetMapping("list")
-	public void list(Model model) {
+	public void list(Criteria cri, Model model) {
 		log.info("========================= list URL요청 =========================");
-		model.addAttribute("list",bs.getList());
+		model.addAttribute("list",bs.getList(cri));
+		model.addAttribute("pageMaker", new PageDTO(cri, bs.count()));
 	}
 	
 	
@@ -33,6 +36,7 @@ public class BoardController {
 		log.info("========================= register Post URL요청 =========================");
 		bs.register(vo);
 		rttr.addFlashAttribute("result", vo.getBno()); //작성된 글번호 한번만 전송
+		rttr.addFlashAttribute("status","register success");
 		return "redirect:/board/list";	//리다이렉트가 없으면 jsp 있으면 요청
 	}
 	
@@ -58,7 +62,8 @@ public class BoardController {
 	public String remove(Long bno, RedirectAttributes rttr) {
 		log.info("========================= remove Post URL요청 =========================");
 		if(bs.remove(bno)) {	//이상이 없다면 데이터 전송
-			rttr.addFlashAttribute("result","remove success");
+			rttr.addFlashAttribute("result", bno);
+			rttr.addFlashAttribute("status","remove success");
 		}
 		return "redirect:/board/list";
 	}
@@ -69,12 +74,25 @@ public class BoardController {
 	public String modify(BoardVO vo, RedirectAttributes rttr) {
 		log.info("========================= modify Post URL요청 =========================");
 		if(bs.modify(vo)) {
-			rttr.addFlashAttribute("result","modify success");
+			rttr.addFlashAttribute("result", vo.getBno());
+			rttr.addFlashAttribute("status","modify success");
 		}
 		return "redirect:/board/list";
 		//return "redirect:/board/get?bno="+vo.getBno();
 	}
 	
+	@GetMapping("charts")
+	public void charts(Model model) {
+		log.info("========================= charts URL요청 =========================");
+		model.addAttribute("list",bs.postCount());
+		model.addAttribute("rank",bs.getRank());
+		model.addAttribute("rankAll",bs.getRankAll());
+		model.addAttribute("avg",bs.getAvg());
+		model.addAttribute("dayList",bs.postCountDay());
+	}
+	
+	
+
 	
 
 	
