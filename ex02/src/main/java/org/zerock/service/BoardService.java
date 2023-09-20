@@ -3,6 +3,8 @@ package org.zerock.service;
 import java.util.List;
 
 import org.zerock.domain.BoardVO;
+import org.zerock.domain.CommPageDTO;
+import org.zerock.domain.CommentVO;
 import org.zerock.domain.Criteria;
 import org.zerock.domain.PostAtTimeVO;
 import org.zerock.domain.RankVO;
@@ -26,7 +28,7 @@ public interface BoardService {
 	BoardVO get(Long bno);
 	
 	//6. 전체 글 수
-	Long count();
+	Long count(Criteria cri);
 	
 	//7. 작성글 수 랭킹 작성자, 작성 글 개수
 	List<RankVO> getRank();
@@ -45,4 +47,16 @@ public interface BoardService {
 	
 	//12. 작성글수 요일통계
 	List<PostAtTimeVO> postCountDay();
+	
+	//13. 댓글읽기
+	List<CommentVO> getComm(Long bno);
+	
+	//14. 댓글 쓰기
+	void regComm(CommentVO vo);
+	
+	//15. 댓글 삭제
+	boolean delComm(Long cno);
+	
+	//16. 전체 댓글 갯수
+	Long commCount();
 }

@@ -26,6 +26,8 @@ public class PageDTO {
 		}
 		
 		startPage = endPage - 9;
+		if(startPage < 1)
+			startPage = 1;
 		
 		prev = (startPage != 1);
 		next = (endPage != realEnd);

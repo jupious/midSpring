@@ -139,7 +139,7 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="/resources/pages/index.html"><i class="fa fa-dashboard fa-fw"></i> 대쉬보드</a>
+                            <a href="dash-board"><i class="fa fa-dashboard fa-fw"></i> 대쉬보드</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> 차트<span class="fa arrow"></span></a>
@@ -163,9 +163,11 @@
 <!--                             <a href="/resources/pages/login.html"><i class="fa fa-files-o fa-fw"></i> Login Page</a> -->
                         
 <!--                         </li> -->
-						
 						<li>
-							<a href = "">여백의 미</a>
+							<a href="register"><i class = "fa fa-pencil"></i>&nbsp;글쓰러가기</a>
+						</li>
+						<li>
+							<a href="/resources/pages/index.html">여백의 미</a>
 						</li>
                     </ul>
                 </div>

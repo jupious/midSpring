@@ -61,7 +61,7 @@ public class BoardServiceImplTests {
 	
 	@Test
 	public void testCount() {
-		log.info("게시글 숫자 서비스 : " + bs.count());
+		log.info("게시글 숫자 서비스 : " + bs.count(new Criteria()));
 		
 	}
 

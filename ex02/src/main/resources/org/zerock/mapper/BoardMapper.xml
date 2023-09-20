@@ -3,17 +3,42 @@
 	PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.zerock.mapper.BoardMapper">	<!-- namespace - 해당 인터페이스를 매핑 -->
+	<!-- 내용에 대해 id를 지정하고 id를 이용해서 쿼리 삽입을 지원 -->
+	<sql id="criteria">
+		<trim prefix="(" suffix=") AND "  prefixOverrides="OR">
+			<foreach collection = "typeArr" item = "type">
+				<trim prefix = "OR">
+					<choose>
+						<when test = 'type=="T"'>
+							title like '%'||#{keyword}||'%'
+						</when>
+						<when test = 'type=="C"'>
+							content like '%'||#{keyword}||'%'
+						</when>
+						<when test = 'type=="W"'>
+							writer like '%'||#{keyword}||'%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+	
 	<!-- id = 메소드 이름 -->
 	<select id="getList" resultType = "org.zerock.domain.BoardVO">	<!-- 리스트 한 행의 반환타입지정 -->
 		select * from tbl_board order by bno desc
 	</select>
 	
-	<select id="getListWithPaging" resultType = "org.zerock.domain.BoardVO">	<!-- 리스트 한 행의 반환타입지정 -->
+	<select id="getListWithPaging" resultType = "org.zerock.domain.BoardVO">	
 		<![CDATA[
-		select bno,title,regdate, updatedate
+		select bno,title, writer, regdate, updatedate
 		from(select /*+index_desc(tbl_board tbl_board_pk)*/
-		            rownum rn,bno,title,regdate, updatedate from tbl_board where rownum <= (#{amount} * #{pageNum}))
-		where rn > (#{pageNum} - 1) * #{amount} and rn <= (#{amount} * #{pageNum})
+		            rownum rn,bno,title,writer, regdate, updatedate 
+		            from tbl_board where 
+		]]>
+		<include refid="criteria" />
+		<![CDATA[ 	rownum <= (#{amount} * #{pageNum}))
+		where rn > (#{pageNum} - 1) * #{amount}
 		]]>
 	</select>
 	
@@ -66,7 +91,9 @@
 	</select>
 	
 	<select id="count" resultType = "long">
-		select count(bno) from tbl_board
+		select count(bno) from tbl_board where
+		<include refid="criteria" />
+		bno > 0
 	</select>
 	
 	<select id="lastBoard" resultType = "org.zerock.domain.BoardVO">
@@ -101,6 +128,32 @@
 		    WHEN '일요일' THEN 7
 		    END ASC
 	</select>
+	
+	<select id="readComm" resultType = "org.zerock.domain.CommentVO">
+<!-- 		<![CDATA[ -->
+<!-- 		select writer, text, commdate, cno -->
+<!-- 		from(select /*+index_desc(comments comments_pk)*/ -->
+<!-- 		            rownum rn, writer, text, commdate, cno -->
+<!-- 		            from comments where  -->
+<!-- 		 			rownum <= (#{camount} * #{cpNum}) and bno = #{bno}) -->
+<!-- 		where rn > (#{cpNum} - 1) * #{camount} -->
+<!-- 		]]> -->
+		select writer, text, commdate, cno from comments where bno = #{bno} order by cno
+	</select>
+	
+	<insert id="insertComm">
+		insert into comments (bno, writer, text, cno) values (#{bno}, #{writer}, #{text}, seq_comment.nextval)
+	</insert>
+	
+	<delete id="rmComm">
+		delete from comments where cno = #{cno}
+	</delete>
+	
+	<select id="commCount" resultType="long">
+		select count(cno) from comments
+	</select>
+	
+	
 	
 <!-- 	<select id="kingUser" resultType="string"> -->
 <!-- 		select * -->

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.domain.BoardVO;
+import org.zerock.domain.CommPageDTO;
+import org.zerock.domain.CommentVO;
 import org.zerock.domain.Criteria;
 import org.zerock.domain.PageDTO;
 import org.zerock.service.BoardService;
@@ -27,7 +29,7 @@ public class BoardController {
 	public void list(Criteria cri, Model model) {
 		log.info("========================= list URL요청 =========================");
 		model.addAttribute("list",bs.getList(cri));
-		model.addAttribute("pageMaker", new PageDTO(cri, bs.count()));
+		model.addAttribute("pageMaker", new PageDTO(cri, bs.count(cri)));
 	}
 	
 	
@@ -40,44 +42,55 @@ public class BoardController {
 		return "redirect:/board/list";	//리다이렉트가 없으면 jsp 있으면 요청
 	}
 	
-	@GetMapping({"register", "remove"})
+	@GetMapping("register")
 	public void inputView() {
 		log.info("입력화면 요청됨");
 	}
 	
+//	@GetMapping("remove")
+//	public void remove(Long bno, Model model, Criteria cri) {
+//		model.addAttribute("board", bs.get(bno));
+//		model.addAttribute("cri", cri);
+//	}
+	
 	@GetMapping("modify")
-	public void modify(Long bno, Model model) {
+	public void modify(Long bno, Model model, Criteria cri) {
 		model.addAttribute("board", bs.get(bno));
+		model.addAttribute("cri", cri);
 	}
 	
 	
 	@GetMapping("get")	//읽기(글번호-bno) board/get(get)
-	public void get(Long bno, Model model) {
+	public void get(Long bno, Model model, Criteria cri) {
 		log.info("========================= get URL요청 =========================");
 		model.addAttribute("board",bs.get(bno));
+		model.addAttribute("cri",cri);
+	
+		model.addAttribute("commentList",bs.getComm(bno));
+	
 	}
 	
 	
 	@PostMapping("remove")	//삭제(글번호-bno) board/remove(post) <-입력화면(get)
-	public String remove(Long bno, RedirectAttributes rttr) {
+	public String remove(Long bno, RedirectAttributes rttr, Criteria cri) {
 		log.info("========================= remove Post URL요청 =========================");
 		if(bs.remove(bno)) {	//이상이 없다면 데이터 전송
 			rttr.addFlashAttribute("result", bno);
 			rttr.addFlashAttribute("status","remove success");
 		}
-		return "redirect:/board/list";
+		return "redirect:/board/list?pageNum="+cri.getPageNum()+"&amount="+cri.getAmount();
 	}
 
 	
 	
 	@PostMapping("modify")	//수정(모든항목-BoardVO) board/modify(post) <-입력화면(get)
-	public String modify(BoardVO vo, RedirectAttributes rttr) {
+	public String modify(BoardVO vo, RedirectAttributes rttr, Criteria cri) {
 		log.info("========================= modify Post URL요청 =========================");
 		if(bs.modify(vo)) {
 			rttr.addFlashAttribute("result", vo.getBno());
 			rttr.addFlashAttribute("status","modify success");
 		}
-		return "redirect:/board/list";
+		return "redirect:/board/list?pageNum="+cri.getPageNum()+"&amount="+cri.getAmount();
 		//return "redirect:/board/get?bno="+vo.getBno();
 	}
 	
@@ -91,8 +104,22 @@ public class BoardController {
 		model.addAttribute("dayList",bs.postCountDay());
 	}
 	
+	@PostMapping("regComm")
+	public String regComm(CommentVO vo, Criteria cri) {
+		bs.regComm(vo);
+		return "redirect:/board/get?bno="+vo.getBno()+"&pageNum="+cri.getPageNum()+"&amount="+cri.getAmount();
+	}
 	
-
+	@PostMapping("delComm")
+	public String delComm(Long cno, Criteria cri, RedirectAttributes rttr, Long bno) {
+		if(bs.delComm(cno)) {
+			rttr.addFlashAttribute("result","댓글 삭제 완료");
+		}
+		return "redirect:/board/get?bno="+bno+"&pageNum="+cri.getPageNum()+"&amount="+cri.getAmount();
+	}
+	@GetMapping("dash-board")
+	public void dashBoard() {
+	}
 	
 
 	

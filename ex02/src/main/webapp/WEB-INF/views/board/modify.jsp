@@ -48,10 +48,12 @@
                                             <label>내용 작성</label>
                                             <textarea class="form-control" rows="3" style = " resize: none;" id = "mcontent" name = "content" required>${board.content}</textarea>
                                         </div>
-                                      	<input type = "text" value = "${board.bno}" name = "bno" hidden />
+                                      	<input type = "hidden" value = "${board.bno}" name = "bno"  />
+                                      	<input type = "hidden" value = "${cri.pageNum}" name = "pageNum"  />
+                                      	<input type = "hidden" value = "${cri.amount}" name = "amount"  />
                                         <button type="button" class="btn btn-default" data-oper = "modify">수정완료</button>
                                         <button class = "btn btn-default" data-oper = "remove">삭제하기</button>
-                                      	<a href = "list"><input type = "button" class="btn btn-outline btn-primary" value = "목록" /></a>
+                                      	<a href = "list?pageNum=${cri.pageNum}&amount=${cri.amount}"><input type = "button" class="btn btn-outline btn-primary" value = "목록" /></a>
                                     </form>
                                 </div>
                                 <!-- /.col-lg-6 (nested) -->

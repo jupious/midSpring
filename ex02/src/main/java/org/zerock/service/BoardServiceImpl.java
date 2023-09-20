@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.zerock.domain.BoardVO;
+import org.zerock.domain.CommPageDTO;
+import org.zerock.domain.CommentVO;
 import org.zerock.domain.Criteria;
 import org.zerock.domain.PostAtTimeVO;
 import org.zerock.domain.RankVO;
@@ -52,9 +54,9 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public Long count() {
+	public Long count(Criteria cri) {
 		log.info("게시글 숫자 서비스");
-		return bm.count();
+		return bm.count(cri);
 	}
 
 	@Override
@@ -109,6 +111,30 @@ public class BoardServiceImpl implements BoardService {
 	public List<PostAtTimeVO> postCountDay() {
 		log.info("요일별 작성글 수~~~~~~~~~~~~~~~~");
 		return bm.postCountDay();
+	}
+
+	@Override
+	public List<CommentVO> getComm(Long bno) {
+		log.info("댓글 읽기~~~~~~~~~~~");
+		return bm.readComm(bno);
+	}
+
+	@Override
+	public void regComm(CommentVO vo) {
+		log.info("댓글 쓰기~~~~~~~~~~~");
+		bm.insertComm(vo);
+	}
+
+	@Override
+	public boolean delComm(Long cno) {
+		log.info("댓글 지우기~~~~~~~~~~~");
+		return bm.rmComm(cno) == 1 ? true : false;
+	}
+
+	@Override
+	public Long commCount() {
+		log.info("전체 댓글 수~~~~~~~~~");
+		return bm.commCount();
 	}
 
 
