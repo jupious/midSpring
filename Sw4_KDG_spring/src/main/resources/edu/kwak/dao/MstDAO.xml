@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.kwak.dao.MstDAO">
+
+	<insert id="inputProduct">
+		insert into product values (#{code}, #{pname}, #{cost}, #{pnum}, #{jnum}, #{sale}, #{gcode})
+	</insert>
+	
+	<select id="searchProduct" resultType="edu.kwak.domain.MstVO">
+		select code, pname, cost, pnum, jnum, sale, gname, gcode from product join groupcode using(gcode) where code = #{code}
+	</select>
+	
+	<update id="modifyProduct">
+		update product set code = #{code}, pname = #{pname}, cost = #{cost}, pnum = #{pnum}, jnum = #{jnum}, sale = #{sale}, 
+		gcode = #{gcode} where code = #{ogcode}
+	</update>
+	
+	<delete id="deleteProduct">
+		delete from product where code = #{code}
+	</delete>
+	
+	<select id="groupName" resultType="edu.kwak.domain.MstVO">
+		select * from groupcode
+	</select>
+	
+	<select id="priorityProduct" resultType="edu.kwak.domain.MstVO">
+		select pname, (pnum-jnum) priority from product where (pnum/jnum) > 5 order by priority desc
+	</select>
+	
+	<select id="benefitRank" resultType = "edu.kwak.domain.MstVO">
+		select pname, ((sale-cost) * jnum) benefit from product order by benefit desc
+	</select>
+	
+	<select id="jnumGroup" resultType = "edu.kwak.domain.MstVO">
+		select gname, sum(jnum) gsum from groupcode join product using(gcode) group by gname
+	</select>
+	
+	<select id="list" resultType = "edu.kwak.domain.MstVO">
+		select code, pname, cost, pnum, jnum, sale, gname from product join groupcode using(gcode) order by code
+	</select>
+</mapper>
