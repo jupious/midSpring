@@ -1,0 +1,102 @@
+우분투 22.04버전
+)
+1. 아래링크로 들어가서 리눅스버전 압축파일 다운로드( 오라클 로그인이 필요)
+(윈도우에서)
+https://download.oracle.com/otn/linux/oracle11g/xe/oracle-xe-11.2.0-1.0.x86_64.rpm.zip  
+또는
+(우분투 콘솔에서) -이짓하면 에러파일이 다운로드 (윈도우에 다운로드해서 옮길것!)
+wget https://download.oracle.com/otn/linux/oracle11g/xe/oracle-xe-11.2.0-1.0.x86_64.rpm.zip
+
+
+2. 다운받은 파일을 압축해제 (unzip으로 하면 된다는데 계속 오류나서 윈도우에서 해제후 winSCP를 이용해서 옮김)
+
+3.rpm파일을 설치하기위해 필요한 패키지 다운로드
+sudo apt-get install alien -y
+(에러발생시 아래 두개도 설치)
+sudo apt-get install libaio1 unixodbc
+
+4. rpm파일을 설치 (시간 꽤많이 걸림)
+sudo alien -i  --scripts 압축해제후 넣어준(또는 해제한) rpm파일
+
+5. 기다리면 아래 메세지가 나오면서 완료됨
+ 
+Selecting previously unselected package oracle-xe.
+(데이터베이스 읽는중 ...현재 205338개의 파일과 디렉터리가 설치되어 있습니다.)
+Preparing to unpack oracle-xe_11.2.0-2_amd64.deb ...
+Unpacking oracle-xe (11.2.0-2) ...
+oracle-xe (11.2.0-2) 설정하는 중입니다 ...
+Executing post-install steps...
+
+You must run '/etc/init.d/oracle-xe configure' as the root user to configure the database.
+
+Processing triggers for libc-bin (2.31-0ubuntu9) ...
+Processing triggers for systemd (245.4-4ubuntu3.1) ...
+Processing triggers for gnome-menus (3.36.0-1ubuntu1) ...
+Processing triggers for desktop-file-utils (0.24-1ubuntu2) ...
+Processing triggers for mime-support (3.64ubuntu1) ...
+
+6.아래 명령어를 통해 오라클 최초설정
+sudo /etc/init.d/oracle-xe configure
+~포트설정[8080]: (원하는 포트번호 입력)
+~포트설정[1521]:(원하는 포트입력 저는 기본값씀)
+
+sys계정 암호설정(특수문자 안됨, 입력하고있는지 안보임)
+설정한 암호확인
+
+부팅시 시작할거?[y/n] : y
+
+7. 오라클 환경변수 추가
+nano ~/.bashrc
+
+아래쪽에
+export ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe 
+export ORACLE_SID=XE 
+export NLS_LANG=`$ORACLE_HOME/bin/nls_lang.sh` 
+export ORACLE_BASE=/u01/app/oracle 
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH 
+export PATH=$ORACLE_HOME/bin:$PATH
+
+추가 후 저장&나가기
+
+8. 변경사항 반영하기
+source ~/.bashrc
+
+9. 네트워크 상태확인을 위해 리스너 확인
+
+lsnrctl status
+
+10. sqlplus 테스트접속
+sqlplus system
+
+11. 테이블스페이스 생성
+
+CREATE TABLESPACE Tablespace명
+datafile '/u01/app/oracle/oradata/XE/Tablespace명.dbf'
+SIZE 100M 
+reuse autoextend ON;
+
+
+12. 사용자 생성
+CREATE USER 유저이름 IDENTIFIED BY 유저비밀번호
+ DEFAULT TABLESPACE Tablespace명
+ TEMPORARY TABLESPACE temp;
+
+13. 사용자 권한 부여
+GRANT CONNECT, RESOURCE, DBA to 유저이름;
+
+@@역할 (기본적으로 사용자를 생성하면 CONNECT, RESOUCE 역할을 준다.)
+-- CONNECT ROLE : 세션 생성 및 테이블 생성, 조회 등의 가장 일반적인 권한들로 이루어진다.
+-- RESOURCE ROLE : Store Procedure 또는 Trigger와 같은 PL/SQL을 사용할 수 있는 권한들로 이루어진다.
+-- DBA ROLE : 모든 시스템 권한이 부여된 역할이다
+-- CRATE USER : 데이터 베이스 유저 생성 권한
+-- SELECT ANY TABLE : 모든 유저의 테이블 조회 권한
+-- CREATE ANY TABLE : 모든 유저의 테이블 생성 권한
+-- CREATE SESSION : 데이터베이스 접속 권한
+-- CREATE TABLE : 테이블 생성 권한
+-- CREATE PROCEDURE : 프로시져 생성 권한
+-- CREATE SEQUENCE : 시퀀스 생성 권한
+-- SYSDBA : 데이터베이스를 관리하는 최고 권한
+-- SYSOPER : 데이터베이스를 관리하는 권한
+
+14. 이후 테스트는 자유롭게 ㅎ
+
