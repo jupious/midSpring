@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.zerock.mapper.CommentMapper">
+
+	<insert id="insertComm">
+		insert into comments (bno, writer, text, cno) values (#{bno}, #{writer}, #{text}, seq_comment.nextval)
+	</insert>
+
+	<select id="readComm" resultType = "org.zerock.domain.CommentVO">
+		select writer, text, commupdate, cno from comments where bno = #{bno} order by cno
+	</select>
+	
+	
+	<delete id="rmComm">
+		delete from comments where cno = #{cno}
+	</delete>
+	
+	<update id="updateComm">
+		update comments set text = #{text}, commupdate = sysdate where cno = #{cno}
+	</update>
+	
+	<select id="commCount" resultType="long">
+		select count(cno) from comments 
+	</select>
+</mapper>
