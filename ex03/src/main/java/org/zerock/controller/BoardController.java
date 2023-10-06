@@ -67,7 +67,7 @@ public class BoardController {
 		model.addAttribute("board",bs.get(bno));
 		model.addAttribute("cri",cri);
 	
-		model.addAttribute("commentList",cs.getComm(bno));
+	//	model.addAttribute("commentList",cs.getComm(bno));
 	
 	}
 	
@@ -105,19 +105,19 @@ public class BoardController {
 		model.addAttribute("dayList",bs.postCountDay());
 	}
 	
-	@PostMapping("regComm")
-	public String regComm(CommentVO vo, Criteria cri) {
-		cs.regComm(vo);
-		return "redirect:/board/get?bno="+vo.getBno()+"&pageNum="+cri.getPageNum()+"&amount="+cri.getAmount();
-	}
-	
-	@PostMapping("delComm")
-	public String delComm(Long cno, Criteria cri, RedirectAttributes rttr, Long bno) {
-		if(cs.delComm(cno)) {
-			rttr.addFlashAttribute("result","댓글 삭제 완료");
-		}
-		return "redirect:/board/get?bno="+bno+"&pageNum="+cri.getPageNum()+"&amount="+cri.getAmount();
-	}
+//	@PostMapping("regComm")
+//	public String regComm(CommentVO vo, Criteria cri) {
+//		cs.regComm(vo);
+//		return "redirect:/board/get?bno="+vo.getBno()+"&pageNum="+cri.getPageNum()+"&amount="+cri.getAmount();
+//	}
+//	
+//	@PostMapping("delComm")
+//	public String delComm(Long cno, Criteria cri, RedirectAttributes rttr, Long bno) {
+//		if(cs.delComm(cno)) {
+//			rttr.addFlashAttribute("result","댓글 삭제 완료");
+//		}
+//		return "redirect:/board/get?bno="+bno+"&pageNum="+cri.getPageNum()+"&amount="+cri.getAmount();
+//	}
 	@GetMapping("dash-board")
 	public void dashBoard() {
 	}

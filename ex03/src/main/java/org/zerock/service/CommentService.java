@@ -20,4 +20,9 @@ public interface CommentService {
 	
 	//17. 전체 댓글 갯수
 	Long commCount();
+	
+	//18. 댓글좋아요
+	boolean likeComm(Long cno);
+	
+	CommentVO get(Long cno);
 }

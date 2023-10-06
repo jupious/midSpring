@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.zerock.domain.CommentVO;
 import org.zerock.mapper.CommentMapper;
+import org.springframework.web.util.HtmlUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -25,6 +26,12 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public boolean regComm(CommentVO vo) {
 		log.info("댓글 쓰기~~~~~~~~~~~");
+		String tag = vo.getText();
+		String esc = HtmlUtils.htmlEscape(tag);
+		vo.setText(esc);
+		tag = vo.getWriter();
+		esc = HtmlUtils.htmlEscape(tag);
+		vo.setWriter(esc);
 		return cm.insertComm(vo) == 1 ? true : false;
 	}
 
@@ -44,6 +51,16 @@ public class CommentServiceImpl implements CommentService {
 	public boolean upComm(CommentVO vo) {
 		log.info("댓글 수정~~~~~~~~~~~~~~~");
 		return cm.updateComm(vo) == 1 ? true : false;
+	}
+
+	@Override
+	public CommentVO get(Long cno) {
+		return cm.get(cno);
+	}
+
+	@Override
+	public boolean likeComm(Long cno) {
+		return cm.like(cno) == 1 ? true : false ;
 	}
 
 }

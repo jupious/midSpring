@@ -53,11 +53,11 @@
                                       	<input type = "hidden" value = "${cri.amount}" name = "amount"  />
                                         <button type="button" class="btn btn-default" data-oper = "modify">수정완료</button>
                                         <button class = "btn btn-default" data-oper = "remove">삭제하기</button>
-                                      	<a href = "list?pageNum=${cri.pageNum}&amount=${cri.amount}"><input type = "button" class="btn btn-outline btn-primary" value = "목록" /></a>
+                                      	
                                     </form>
                                 </div>
                                 <!-- /.col-lg-6 (nested) -->
-                              
+                              <a href = "list?pageNum=${cri.pageNum}&amount=${cri.amount}" id = "toList"><button class="btn btn-primary btn-circle btn-xl"><i class="fa fa-list" ></i></button></a>
                                 <!-- /.col-lg-6 (nested) -->
                             </div>
                             <!-- /.row (nested) -->

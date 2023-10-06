@@ -9,7 +9,7 @@
 	</insert>
 
 	<select id="readComm" resultType = "org.zerock.domain.CommentVO">
-		select writer, text, commupdate, cno from comments where bno = #{bno} order by cno
+		select bno, text, writer, commdate, commupdate, cno, thumbsup, sysdate timenow from comments where bno = #{bno} order by cno
 	</select>
 	
 	
@@ -24,4 +24,12 @@
 	<select id="commCount" resultType="long">
 		select count(cno) from comments 
 	</select>
+	
+	<select id="get" resultType="org.zerock.domain.CommentVO">
+	select * from comments where cno=#{cno}
+	</select>
+	
+	<update id="like">
+		update comments set thumbsup = thumbsup+1 where cno = #{cno}
+	</update>
 </mapper>

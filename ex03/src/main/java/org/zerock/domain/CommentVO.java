@@ -12,4 +12,6 @@ public class CommentVO {
 	private Date commdate;
 	private Long cno;
 	private Date commupdate;
+	private Date timenow;
+	private Long thumbsup;
 }

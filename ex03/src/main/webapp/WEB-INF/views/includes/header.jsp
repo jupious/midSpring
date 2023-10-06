@@ -38,6 +38,25 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+    	#toTop{
+    		position:fixed;
+    		top:65%;
+    		right:48px;
+    	}
+    	#toBottom{
+    		position:fixed;
+    		bottom:128pt;
+    		right:48px;
+    	}
+    	 #toList {
+           
+            position:fixed;
+            top:70%;
+            right:40px;
+        }
+        
+    </style>
 
 </head>
 
@@ -54,7 +73,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="list">스프링 게시판 프로젝트</a>
+                <a class="navbar-brand" href="list" id = "top">스프링 게시판 프로젝트</a>
             </div>
             <!-- /.navbar-header -->
             <!-- /.navbar-top-links -->

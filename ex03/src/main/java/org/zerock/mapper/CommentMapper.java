@@ -23,5 +23,10 @@ public interface CommentMapper {
 		
 	//전체 글 개수
 	Long count(Criteria cri);
+	
+	//댓글추천하기
+	int like(Long cno);
+	
+	CommentVO get(Long cno);
 
 }

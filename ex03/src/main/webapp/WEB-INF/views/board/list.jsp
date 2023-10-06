@@ -36,7 +36,7 @@
                                 <c:forEach items = "${list}" var = "board">
                                		<tr>
                                 		<td>${board.bno}</td>
-                                        <td><a href = "get?bno=${board.bno}&pageNum=${pageMaker.cri.pageNum}&amount=${pageMaker.cri.amount}&cpNum=1"><c:out value="${board.title}"/></a></td>
+                                        <td><a href = "get?bno=${board.bno}&pageNum=${pageMaker.cri.pageNum}&amount=${pageMaker.cri.amount}"><c:out value="${board.title}"/></a></td>
                                         <td><c:out value="${board.writer}"/></td>
                                         <td class="center"><fmt:formatDate value="${board.regdate}" pattern = "yyyy-MM-dd HH:mm"/></td>
                                         <td class="center"><fmt:formatDate value="${board.updatedate}" pattern = "yyyy-MM-dd HH:mm"/></td>
