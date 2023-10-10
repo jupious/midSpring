@@ -65,6 +65,10 @@ public interface BoardMapper {
 	//전체 글 개수
 	Long count(Criteria cri);
 	
+
+	
+
+	
 	//</보너스>
 	
 	//목록 페이징 - 현재는 무조건 2페이지 출력 (페이지당 10개)

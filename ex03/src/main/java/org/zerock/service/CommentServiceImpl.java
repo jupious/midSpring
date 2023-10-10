@@ -62,5 +62,16 @@ public class CommentServiceImpl implements CommentService {
 	public boolean likeComm(Long cno) {
 		return cm.like(cno) == 1 ? true : false ;
 	}
-
+	
+	@Override
+	public String postHaveComm() {
+		log.info("댓글이 있는 게시글 수~~~~~~~~~~~~~~~~");
+		return cm.postHaveComm()+"";
+	}
+	
+	@Override
+	public Long commRank() {
+		log.info("가장 댓글이 많은 글 수~~~~~~~~~~~");
+		return cm.commRank();
+	}
 }

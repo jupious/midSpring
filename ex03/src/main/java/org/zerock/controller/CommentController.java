@@ -26,7 +26,7 @@ import lombok.extern.log4j.Log4j;
 public class CommentController {
 	private CommentService cs;
 	
-	//consumes  통해 보내온데이터 타입확인 틀리면  415(ttpStatus.UNSUPPORTED_MEDIA_TYPE)
+	//consumes  통해 보내온데이터 타입확인 틀리면  415(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
 	@PostMapping(value = "/new", consumes=MediaType.APPLICATION_JSON_VALUE ,
 								 produces="text/plain;charset=UTF-8")
 	public ResponseEntity<String> regComm(@RequestBody CommentVO vo){
@@ -65,4 +65,7 @@ public class CommentController {
 		return cs.likeComm(cno) ? new ResponseEntity<>("success", HttpStatus.OK)
 				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+
 }
+

@@ -46,7 +46,7 @@
               
                                         <div class="form-group">
                                             <label>내용 작성</label>
-                                            <textarea class="form-control" rows="3" style = " resize: none;" name = "content" required></textarea>
+                                            <textarea class="form-control" rows="20" style = " resize: none;" name = "content" required></textarea>
                                         </div>
                                       
                                         <button type="submit" class="btn btn-default">작성</button>

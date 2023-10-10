@@ -17,11 +17,12 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            게시글 목록
+                            게시글 목록     
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                 			
+                 			<p class = "text-right">(댓글이 있는 게시글 숫자 : <span id = "postCount"></span>)</p>
+                 			<P class = "text-right">(가장 많은 댓글이 있는 게시글 번호 : <span id = "commRank"></span>)</p>
                             <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                     <tr>
@@ -36,7 +37,7 @@
                                 <c:forEach items = "${list}" var = "board">
                                		<tr>
                                 		<td>${board.bno}</td>
-                                        <td><a href = "get?bno=${board.bno}&pageNum=${pageMaker.cri.pageNum}&amount=${pageMaker.cri.amount}"><c:out value="${board.title}"/></a></td>
+                                        <td><a href = "get?bno=${board.bno}&pageNum=${pageMaker.cri.pageNum}&amount=${pageMaker.cri.amount}"><c:out value="${board.title} [${board.commcount}]"/></a></td>
                                         <td><c:out value="${board.writer}"/></td>
                                         <td class="center"><fmt:formatDate value="${board.regdate}" pattern = "yyyy-MM-dd HH:mm"/></td>
                                         <td class="center"><fmt:formatDate value="${board.updatedate}" pattern = "yyyy-MM-dd HH:mm"/></td>
@@ -167,7 +168,66 @@
 			$('#search').click(function(e){
 				e.preventDefault;
 				if(!$('#keyword').val())
-					alert('검색어를 입력해주세요!')
+					alert('검색어를 입력해주세요!');
+			})
+		})
+	</script>
+
+	<script>
+		$(function (){
+			$.ajax({
+				type: "get",
+				url: "/myapi/replybnocount",
+				success:function(result){
+					console.log("갯수 가져오기 성공");
+					$('#postCount').html(result);
+				},
+				error:function(){
+					console.log("갯수 가져오기 오류");
+					
+				}
+			})
+		})
+	</script>
+	
+		<script>
+		$(function (){
+			$.ajax({
+				type: "put",
+				url: "/myapi/bestbno",
+				success:function(result){
+					console.log("글번호 가져오기 성공");
+					console.log("bestbno 응답:",result);
+					$('#commRank').html(result.bno);
+				},
+				error:function(){
+					console.log("글번호 가져오기 오류");
+					
+				}
+			})
+		})
+	</script>
+	
+	<script>
+		var pageNum = "${param.pageNum}";
+		var amount = "${param.amount}";
+		if(pageNum === "")
+			pageNum = 1;
+		if(amount === "")
+			amount = 10;
+		$(function (){
+			
+			$.ajax({
+				type:"get",
+				url: "/myapi/board/"+pageNum+"/"+amount,
+				success:function(result){
+					console.log("글목록 가져오기 성공");
+					console.log("가져온 데이터 : ",result);
+					
+				},
+				error:function(){
+					console.log("글목록 가져오기 오류");
+				}
 			})
 		})
 	</script>

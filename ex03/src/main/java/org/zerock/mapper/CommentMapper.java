@@ -27,6 +27,12 @@ public interface CommentMapper {
 	//댓글추천하기
 	int like(Long cno);
 	
+	//댓글이 있는 게시글 숫자
+	Long postHaveComm();
+	
+	//가장 많은 댓글이 달린 게시글번호
+	Long commRank();
+	
 	CommentVO get(Long cno);
 
 }

@@ -32,4 +32,18 @@
 	<update id="like">
 		update comments set thumbsup = thumbsup+1 where cno = #{cno}
 	</update>
+	
+		
+	<select id="postHaveComm" resultType="long">
+		select count(distinct bno) from comments
+	</select>
+	
+		<select id="commRank" resultType="long">
+		select bno
+		from(select bno, count(*) commcount from comments
+		group by bno order by commcount desc)
+		where rownum = 1
+	</select>
+	
+	
 </mapper>

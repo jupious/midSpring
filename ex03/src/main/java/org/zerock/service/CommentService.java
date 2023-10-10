@@ -24,5 +24,12 @@ public interface CommentService {
 	//18. 댓글좋아요
 	boolean likeComm(Long cno);
 	
+	//19. 댓글이 있는 게시글 수
+	String postHaveComm();
+	
+	//14. 가장 많은 댓글이 달린 게시글번호
+	Long commRank();
+
+	
 	CommentVO get(Long cno);
 }

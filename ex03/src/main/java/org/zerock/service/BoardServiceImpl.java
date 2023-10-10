@@ -1,10 +1,11 @@
 package org.zerock.service;
 
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.zerock.domain.BoardVO;
-import org.zerock.domain.CommentVO;
+
 import org.zerock.domain.Criteria;
 import org.zerock.domain.PostAtTimeVO;
 import org.zerock.domain.RankVO;
@@ -24,7 +25,13 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<BoardVO> getList(Criteria cri) {
 		log.info("목록보기 서비스");
-		return bm.getListWithPaging(cri);
+		List<BoardVO> list = bm.getListWithPaging(cri);
+		for (BoardVO vo : list) {
+			if(vo.getCommcount() == null) {
+				vo.setCommcount(0);
+			}
+		}
+		return list;
 	}
 
 	@Override
@@ -111,6 +118,12 @@ public class BoardServiceImpl implements BoardService {
 		log.info("요일별 작성글 수~~~~~~~~~~~~~~~~");
 		return bm.postCountDay();
 	}
+
+
+
+	
+
+
 
 
 

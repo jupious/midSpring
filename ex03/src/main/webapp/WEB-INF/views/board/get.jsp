@@ -29,24 +29,27 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            게시글 읽기
+                        	<table class ="table" style = "margin-bottom: 0pt; margin-top: 0pt; padding-top: 0pt; padding-bottom: 0pt;">
+	                        	<thead>
+	                        		<tr>
+		                        		<th><h4> <c:out value="${board.title}" /> </h4></th>
+		                        		
+	                        		</tr>
+	                        	</thead>
+	                        	<tbody>
+	                        		<tr>
+	                        			<td><small> <c:out value="${board.writer}" /> |  <fmt:formatDate value="${board.regdate}" pattern = "yyyy-MM-dd HH:mm"/></small></td>
+	                        		</tr>
+	                        	</tbody>
+                        	</table>
                         </div>
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-6">
+
                                         <div class="form-group">
-                                            <label>제목</label>
-                                            <input class="form-control" name = "title" required value="${board.title}" readonly/>
-                                            
-                                        </div>
-                                        <div class="form-group">
-                                            <label>작성자</label>
-                                            <input class="form-control" placeholder="누구세요?" name = "writer" value="${board.writer}" readonly/>
-                                        </div>
-              
-                                        <div class="form-group">
-                                            <label>내용 작성</label>
-                                            <textarea class="form-control" rows="3" style = " resize: none;" name = "content" required readonly>${board.content}</textarea>
+                                          
+                                            <textarea class="form-control" rows="20" style = " resize: none; background-color: white;" name = "content" required readonly>${board.content}</textarea>
                                         </div>
                                         <div class = "pull-right">
                                        <a href = "modify?bno=${board.bno}&pageNum=${cri.pageNum}&amount=${cri.amount}"><button class="btn btn-outline btn-warning">수정</button></a>
@@ -80,11 +83,12 @@
                                         <input type = "hidden" name = "bno" value = "${board.bno}">
                                         <div class = "pull-right">
                                        		<button class="btn btn-outline btn-primary" id = "input">입력</button>
+                                       		 <span id = "bottom" ></span>
                                       	</div>
                                 </div>
                                 <a href = "#top" id = "toTop"><button class="btn btn-primary btn-circle btn-lg"><i class ="fa fa-arrow-up"></i></button></a>
                           		<a href = "list?pageNum=${cri.pageNum}&amount=${cri.amount}" id = "toList"><button class="btn btn-primary btn-circle btn-xl"><i class="fa fa-list"></i></button></a>
-                              	<a href = "#input" id = "toBottom"><button class="btn btn-primary btn-circle btn-lg"><i class ="fa fa-arrow-down"></i></button></a>
+                              	<a href = "#bottom" id = "toBottom"><button class="btn btn-primary btn-circle btn-lg"><i class ="fa fa-arrow-down"></i></button></a>
                             <!-- /.row (nested) -->
                         </div>
                         <!-- /.panel-body -->
@@ -92,6 +96,7 @@
                     <!-- /.panel -->
                 </div>
                 <!-- /.col-lg-12 -->
+               
             </div>
             <!-- /.row -->
         </div>

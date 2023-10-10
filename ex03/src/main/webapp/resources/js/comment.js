@@ -161,7 +161,7 @@ var commentService = (function(){
 		dateGap = Math.floor(dateGap);
 		
 		//return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
-		//return hourGap + "시간 전";
+
 		if(yearGap > 0){
 			return yearGap + "년 전";
 		}else if(monthGap > 0){
@@ -176,7 +176,9 @@ var commentService = (function(){
 			return secGap + "초 전";
 		}
 		
+		
 	}
+
 
 	//  이름 : 값(함수명)
 	return {add:add, getList:getList,del:del,modify:modify, get:get, like:like, time:displayTime};

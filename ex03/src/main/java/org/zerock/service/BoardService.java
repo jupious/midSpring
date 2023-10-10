@@ -47,5 +47,8 @@ public interface BoardService {
 	//12. 작성글수 요일통계
 	List<PostAtTimeVO> postCountDay();
 	
+	
+
+
 
 }
