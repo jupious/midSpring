@@ -1,5 +1,6 @@
 package org.zerock.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.http.MediaType;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.zerock.domain.BoardVO;
+import org.zerock.domain.ChartVO;
+import org.zerock.domain.CommentVO;
 import org.zerock.domain.Criteria;
 import org.zerock.domain.Total;
 import org.zerock.service.BoardService;
@@ -18,10 +21,7 @@ import org.zerock.service.CommentService;
 
 
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j;
-import oracle.jdbc.proxy.annotation.Post;
 
-@Log4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("/myapi")
@@ -64,9 +64,23 @@ public class MyAPIController {
 		cri.setPageNum(pageNum);
 		cri.setAmount(amount);
 		return bs.getList(cri);
-		
 	}
 	
+	@GetMapping(value = "/commentsToday", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public List<CommentVO> commentsToday(){
+		return cs.commToday();
+	}
+	
+	@GetMapping(value = "/commentsTodayCount", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ChartVO commentsTodayCount() {
+		
+		return cs.commTodayCount();
+	}
+	
+	@GetMapping(value = "/getPopular", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public List<BoardVO> getPopular(){
+		return cs.getPopular();
+	}
 	
 	
 	

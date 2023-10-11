@@ -2,6 +2,8 @@ package org.zerock.mapper;
 
 import java.util.List;
 
+import org.zerock.domain.BoardVO;
+import org.zerock.domain.ChartVO;
 import org.zerock.domain.CommentVO;
 import org.zerock.domain.Criteria;
 
@@ -33,6 +35,16 @@ public interface CommentMapper {
 	//가장 많은 댓글이 달린 게시글번호
 	Long commRank();
 	
+	//오늘달린 댓글 목록
+	List<CommentVO> commToday();
+	
+	//오늘달린 댓글 갯수, 현재시간
+	ChartVO commTodayCount();
+	
+	//실시간 인기글
+	List<BoardVO> getPopular();
+	
 	CommentVO get(Long cno);
+	
 
 }

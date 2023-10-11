@@ -143,18 +143,38 @@
 		getComment();
 		
 		
-		
 	});
+	$('#text').on("keydown", function(key){
+		if(key.keyCode==13){
+			if(!key.shiftKey){				
+				console.log("엔터키 입력됨");
+				key.preventDefault;
+				$(this).blur();
+				regComm();
+			}else{
+				console.log("시프트키도 같이눌림")
+			}
+		}
+	})
+	
+	function regComm(){
+		var bno = ${board.bno};
+		var writer = $('#writer').val();
+		var text = $('#text').val();
+		var comment = {text:text, writer:writer, bno:bno};
+		$('#writer').val("");
+		$('#text').val("");
+		commentService.add(comment, getComment);
+	}
 	
 	$('#input').on("click", function(){
-			var bno = ${board.bno};
-			var writer = $('#writer').val();
-			var text = $('#text').val();
-			var comment = {text:text, writer:writer, bno:bno};
-			$('#writer').val("");
-			$('#text').val("");
-			commentService.add(comment, getComment);
+			regComm();
 	});
+	
+	$('#text').on("click",function(){
+		var pos = $(this).prop("selectionStart");
+		
+	})
 	
 	$('#commentContainer').on("click", ".delete", function(){
 		var cno = $(this).prev().prev("span").text();

@@ -45,5 +45,28 @@
 		where rownum = 1
 	</select>
 	
+	<select id="commToday" resultType="org.zerock.domain.CommentVO">
+	select text, writer from comments
+	where to_char(commdate,'yyyymmdd') = to_char(sysdate,'yyyymmdd')
+	order by commdate
+	</select>
+	
+	<select id = "commTodayCount" resultType="org.zerock.domain.ChartVO">
+		select count(*) data, sysdate dateTime from comments
+		where to_char(commdate,'yyyymmdd') = to_char(sysdate,'yyyymmdd')
+		order by commdate
+	</select>
+	
+	<select id = "getPopular" resultType="org.zerock.domain.BoardVO">
+	<![CDATA[
+	select t1.bno, title, commcount
+	from(select rownum, bno, commcount 
+		from(select bno, count(*) commcount
+			 from(select * from comments
+				  where (sysdate - commdate)*24 < 1)
+			 group by bno
+			 order by commcount desc)
+		where rownum <=3) t1 left join tbl_board t2 on (t1.bno = t2.bno) ]]>
+	</select>
 	
 </mapper>

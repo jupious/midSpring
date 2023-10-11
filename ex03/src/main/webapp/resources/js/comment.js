@@ -172,8 +172,10 @@ var commentService = (function(){
 			return hourGap + "시간 전";
 		}else if(minGap > 0){
 			return minGap + "분 전";
-		}else{
+		}else if(secGap > 30){
 			return secGap + "초 전";
+		}else{
+			return "방금";
 		}
 		
 		

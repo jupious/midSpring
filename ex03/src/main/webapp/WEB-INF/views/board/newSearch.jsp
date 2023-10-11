@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>newSearch</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
 </head>
 <body>
@@ -34,16 +34,12 @@
 	$(function(){
 		var pageNum;
 		var amount ;
-		var type;
-		var keyword;
 		$('#search').on("click", function(e){
-			e.preventdefault;
+			e.preventDefault;
 			console.log("검색버튼 클릭됨");
 			pageNum = $('#pageNum').val();
 			amount = $('#amount').val();
-			type1 = $('#type').val();
-			keyword1 = $('#keyword').val();
-			console.log(type1, keyword1);
+	
 			var data = {type:$('#type').val() ,keyword:$('#keyword').val()};
 			console.log(data);
 			$.ajax({
@@ -52,11 +48,10 @@
 				data:JSON.stringify(data),
 				contentType:"application/json;charset=UTF-8",
 				success:function(result){
-					console.log("갯수 가져오기 성공");
-					var res = result;
+					console.log("결과 가져오기 성공");
 					var resStr = "";
-					for(var i = 0; i < res.length; i++){
-						resStr += "<li>"+res[i].title+"</li>";
+					for(var i = 0; i < result.length; i++){
+						resStr += "<li>"+result[i].title+"</li>";
 					}
 					$('#result').html(resStr);
 				},

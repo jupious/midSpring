@@ -3,6 +3,8 @@ package org.zerock.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.zerock.domain.BoardVO;
+import org.zerock.domain.ChartVO;
 import org.zerock.domain.CommentVO;
 import org.zerock.mapper.CommentMapper;
 import org.springframework.web.util.HtmlUtils;
@@ -73,5 +75,22 @@ public class CommentServiceImpl implements CommentService {
 	public Long commRank() {
 		log.info("가장 댓글이 많은 글 수~~~~~~~~~~~");
 		return cm.commRank();
+	}
+
+	@Override
+	public List<CommentVO> commToday() {
+		log.info("오늘 달린 댓글~~~~~~~~~~~~~~~~~~~~");
+		return cm.commToday();
+	}
+
+	@Override
+	public ChartVO commTodayCount() {
+		log.info("오늘 달린 댓글 수~~~~~~~~~~~~~~~");
+		return cm.commTodayCount();
+	}
+
+	@Override
+	public List<BoardVO> getPopular() {
+		return cm.getPopular();
 	}
 }

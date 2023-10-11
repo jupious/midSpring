@@ -13,4 +13,5 @@ public class BoardVO {
 	private Date regdate;
 	private Date updatedate;
 	private Integer commcount;
+	private Integer rank;
 }

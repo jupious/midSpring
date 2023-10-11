@@ -114,5 +114,18 @@ public class BoardController {
 	@GetMapping("newSearch")
 	public void newSearch() {}
 
+	@GetMapping("newReply")
+	public void newReply() {
+		
+	}
 	
+	@GetMapping("highCharts")
+	public void highCharts() {
+		
+	}
+	
+	@GetMapping("bestboard")
+	public void bestboard() {
+		
+	}
 }

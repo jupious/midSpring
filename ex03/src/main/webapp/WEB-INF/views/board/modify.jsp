@@ -46,7 +46,7 @@
               
                                         <div class="form-group">
                                             <label>내용 작성</label>
-                                            <textarea class="form-control" rows="3" style = " resize: none;" id = "mcontent" name = "content" required>${board.content}</textarea>
+                                            <textarea class="form-control" rows="20" style = " resize: none;" id = "mcontent" name = "content" required>${board.content}</textarea>
                                         </div>
                                       	<input type = "hidden" value = "${board.bno}" name = "bno"  />
                                       	<input type = "hidden" value = "${cri.pageNum}" name = "pageNum"  />

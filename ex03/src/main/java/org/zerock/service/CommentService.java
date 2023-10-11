@@ -2,6 +2,8 @@ package org.zerock.service;
 
 import java.util.List;
 
+import org.zerock.domain.BoardVO;
+import org.zerock.domain.ChartVO;
 import org.zerock.domain.CommentVO;
 
 public interface CommentService {
@@ -29,7 +31,15 @@ public interface CommentService {
 	
 	//14. 가장 많은 댓글이 달린 게시글번호
 	Long commRank();
-
+	
+	//??. 오늘 달린 댓글
+	List<CommentVO> commToday();
+	
+	//오늘 달린 댓글 수
+	ChartVO commTodayCount();
+	
+	//1시간 안에 가장 많은 댓글이 달린 게시글3위까지
+	List<BoardVO> getPopular();
 	
 	CommentVO get(Long cno);
 }
