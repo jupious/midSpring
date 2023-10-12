@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-
+	
     <title>차트</title>
 
     <!-- Bootstrap Core CSS -->
@@ -29,6 +29,8 @@
 
     <!-- Custom Fonts -->
     <link href="/resources/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -145,7 +147,7 @@
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> 차트<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="charts">Google Charts</a>
+                                    <a href="charts">Interesting Data</a>
                                 </li>
 <!--                                 <li> -->
 <!--                                     <a href="/resources/pages/morris.html">Morris.js Charts</a> -->
@@ -188,6 +190,19 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
+                    	<div class="panel-heading" >
+                            실시간 댓글 수(아직은 오늘의 누적댓글)
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                        <figure>
+					    	<div class="container-fluid">
+					        	<div class="row">
+					            	<div class="container-fluid" id="container" style="width: 900; height: 650;"></div>
+					          	</div>
+					      	</div>
+					    </figure>
+					    </div>
                    		<div class="panel-heading">
                             요일별 작성글 수 통계
                         </div>
@@ -230,5 +245,87 @@
         </div>
               <!-- footer 파일 넣기 -->
 <%@ include file = "../includes/footer.jsp" %>
+<script>
+	var chart;
+	
+	
+
+	
+	$(function(){
+		Highcharts.setOptions({
+			 global: {
+		        	useUTC:false,
+		        }
+		})
+		chart = new Highcharts.Chart({
+	        chart: {
+	            renderTo: 'container',
+	            defaultSeriesType: 'spline',
+	            events: {
+	                load: getData
+	            }
+	        },
+	        title: {
+	            text: '실시간 작성 댓글수(아직은 누적댓글)'
+	        },
+	        xAxis: {
+	            type: 'datetime',
+	            tickPixelInterval: 150,
+	            maxZoom: 20 * 1000,
+	            style:{
+	            	fontsize: 14
+	            }
+	        },
+	        yAxis: {
+	            minPadding: 0.2,
+	            maxPadding: 0.2,
+	            title: {
+	                text: '단위(개)',
+	                margin: 80
+	            }
+	        },
+	        series: [{
+	            name: '댓글 수',
+	            data: []
+	        }],
+	        accessibility: {
+	            enabled: false
+	         }
+	        
+	    });
+		
+		
+	})
+	
+	function getData(){
+			setInterval(function(){
+				$.ajax({
+					type:"get",
+					url:"/myapi/commentsTodayCount",
+					success:function(res){
+						console.log("갯수, 시간"+res.data+res.dateTime);
+						var series = chart.series[0],
+							shift = series.data.length > 20;
+// 						var time = res.dateTime+(1000*60*60*9);
+// 						time = new Date(time);
+// 						time=time.toISOString();
+						time = new Date(res.dateTime).toISOString;
+						timetest = res.dateTime/1000;
+						console.log("시간테스트",timetest)
+						console.log(time);
+						chart.series[0].addPoint([res.dateTime,res.data], true, shift);
+						
+						
+					},
+					error:function(er){
+						console.log("에러발생");
+						console.log(er);
+					},
+					cache: false
+				});
+			},1000);
+		}
+	
+</script>
   </body>
 </html>

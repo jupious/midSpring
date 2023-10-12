@@ -44,6 +44,9 @@ public interface CommentMapper {
 	//실시간 인기글
 	List<BoardVO> getPopular();
 	
+	//글 삭제시 댓글먼저 지워주기
+	int deleteCommOnPost(Long bno);
+	
 	CommentVO get(Long cno);
 	
 

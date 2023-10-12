@@ -41,5 +41,9 @@ public interface CommentService {
 	//1시간 안에 가장 많은 댓글이 달린 게시글3위까지
 	List<BoardVO> getPopular();
 	
+	//글지울때 댓글 지우기
+	int deleteCommentOnPost(Long bno);
+	
+	
 	CommentVO get(Long cno);
 }

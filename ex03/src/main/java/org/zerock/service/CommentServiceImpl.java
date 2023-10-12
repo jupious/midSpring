@@ -93,4 +93,9 @@ public class CommentServiceImpl implements CommentService {
 	public List<BoardVO> getPopular() {
 		return cm.getPopular();
 	}
+
+	@Override
+	public int deleteCommentOnPost(Long bno) {
+		return cm.deleteCommOnPost(bno);
+	}
 }

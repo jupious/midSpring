@@ -87,8 +87,8 @@
                                       	</div>
                                 </div>
                                 <a href = "#top" id = "toTop"><button class="btn btn-primary btn-circle btn-lg"><i class ="fa fa-arrow-up"></i></button></a>
-                          		<a href = "list?pageNum=${cri.pageNum}&amount=${cri.amount}" id = "toList"><button class="btn btn-primary btn-circle btn-xl"><i class="fa fa-list"></i></button></a>
                               	<a href = "#bottom" id = "toBottom"><button class="btn btn-primary btn-circle btn-lg"><i class ="fa fa-arrow-down"></i></button></a>
+                          		<a href = "list?pageNum=${cri.pageNum}&amount=${cri.amount}" id = "toList"><button class="btn btn-primary btn-circle btn-xl"><i class="fa fa-list"></i></button></a>
                             <!-- /.row (nested) -->
                         </div>
                         <!-- /.panel-body -->
@@ -193,7 +193,8 @@
 		console.log("cno =",cno);
 		var text = $(this).parent().prev(".commentBody").children();
 		ogText = text.text();
-		text.parent().html('<input class="form-control" id = "modifing" value = "'+ogText+'" />').children().focus();
+		text.parent().html('<input class="form-control" id = "modifing" />').children().focus();
+		$('#modifing').val(ogText);
 		$(this).hide();
 		$(this).next().hide();
 		$(this).parent().append('<button class="btn btn-outline btn-primary btn-xs modConfirm" onclick="mod('+cno+')" id="'+cno+'">수정완료</button>');

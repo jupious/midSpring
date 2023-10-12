@@ -38,7 +38,7 @@
 		select count(distinct bno) from comments
 	</select>
 	
-		<select id="commRank" resultType="long">
+	<select id="commRank" resultType="long">
 		select bno
 		from(select bno, count(*) commcount from comments
 		group by bno order by commcount desc)
@@ -59,14 +59,18 @@
 	
 	<select id = "getPopular" resultType="org.zerock.domain.BoardVO">
 	<![CDATA[
-	select t1.bno, title, commcount
-	from(select rownum, bno, commcount 
+	select rank, t1.bno, title, commcount
+	from(select rownum rank, bno, commcount 
 		from(select bno, count(*) commcount
 			 from(select * from comments
 				  where (sysdate - commdate)*24 < 1)
 			 group by bno
 			 order by commcount desc)
-		where rownum <=3) t1 left join tbl_board t2 on (t1.bno = t2.bno) ]]>
+		where rownum <=10) t1 left join tbl_board t2 on (t1.bno = t2.bno) ]]>
 	</select>
+	
+	<delete id="deleteCommOnPost">
+		delete from comments where bno = #{bno}
+	</delete>
 	
 </mapper>

@@ -6,6 +6,8 @@
 <meta charset="UTF-8">
 <title>highCharts</title>
 <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+
   
 </head>
 <body>
@@ -25,6 +27,11 @@
 
 	
 	$(function(){
+		Highcharts.setOptions({
+			 global: {
+		        	useUTC:false,
+		        }
+		})
 		chart = new Highcharts.Chart({
 	        chart: {
 	            renderTo: 'container',
@@ -37,9 +44,15 @@
 	            text: '실시간 작성 댓글수(아직은 누적댓글)'
 	        },
 	        xAxis: {
-	            type: 'dateTime',
+	            type: 'datetime',
 	            tickPixelInterval: 150,
-	            maxZoom: 20 * 1000
+	            maxZoom: 20 * 1000,
+	            labels:{
+	            	style:{
+		            	fontsize: '20px'
+		            }	
+	            }
+	            
 	        },
 	        yAxis: {
 	            minPadding: 0.2,
@@ -59,7 +72,6 @@
 	        
 	    });
 		
-		
 	})
 	
 	function getData(){
@@ -71,15 +83,12 @@
 						console.log("갯수, 시간"+res.data+res.dateTime);
 						var series = chart.series[0],
 							shift = series.data.length > 20;
-						var time = new Date(res.dateTime);
-						var year = time.getFullYear();
-						var month = time.getMonth()+1;
-						var date = time.getDate();
-						var hour = time.getHours();
-						var min = time.getMinutes();
-						var sec = time.getSeconds();
-						var now = year+"-"+month+"-"+date+" "+hour+":"+min+":"+sec;
-						
+// 						var time = res.dateTime+(1000*60*60*9);
+// 						time = new Date(time);
+// 						time=time.toISOString();
+						time = new Date(res.dateTime).toISOString;
+						timetest = res.dateTime/1000;
+						console.log("시간테스트",timetest)
 						console.log(time);
 						chart.series[0].addPoint([res.dateTime,res.data], true, shift);
 						

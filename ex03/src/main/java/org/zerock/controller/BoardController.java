@@ -3,6 +3,7 @@ package org.zerock.controller;
 
 
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import org.zerock.domain.BoardVO;
 import org.zerock.domain.Criteria;
 import org.zerock.domain.PageDTO;
 import org.zerock.service.BoardService;
+import org.zerock.service.CommentService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -23,6 +25,7 @@ import lombok.extern.log4j.Log4j;
 public class BoardController {
 
 	private BoardService bs;	//생성자 주입
+	private CommentService cs;
 
 	
 	@GetMapping("list")
@@ -74,8 +77,12 @@ public class BoardController {
 	
 	
 	@PostMapping("remove")	//삭제(글번호-bno) board/remove(post) <-입력화면(get)
+	@Transactional
 	public String remove(Long bno, RedirectAttributes rttr, Criteria cri) {
 		log.info("========================= remove Post URL요청 =========================");
+		
+		log.info("댓글들 "+cs.deleteCommentOnPost(bno)+"개 같이 삭제완료");
+		
 		if(bs.remove(bno)) {	//이상이 없다면 데이터 전송
 			rttr.addFlashAttribute("result", bno);
 			rttr.addFlashAttribute("status","remove success");

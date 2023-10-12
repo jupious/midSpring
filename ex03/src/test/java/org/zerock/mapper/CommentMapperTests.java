@@ -27,4 +27,8 @@ public class CommentMapperTests {
 	public void testGetPopular() {
 		cm.getPopular();
 	}
+	@Test
+	public void testDCP() {
+		cm.deleteCommOnPost(2457642L);
+	}
 }

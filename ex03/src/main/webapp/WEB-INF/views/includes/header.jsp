@@ -46,7 +46,7 @@
     	}
     	#toBottom{
     		position:fixed;
-    		bottom:128pt;
+    		top:77%;
     		right:48px;
     	}
     	 #toList {
@@ -99,7 +99,7 @@
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> 차트<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="charts">Google Charts</a>
+                                    <a href="charts">Interesting Data</a>
                                 </li>
 <!--                                 <li> -->
 <!--                                     <a href="/resources/pages/morris.html">Morris.js Charts</a> -->
