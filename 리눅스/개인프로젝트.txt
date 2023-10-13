@@ -1,0 +1,25 @@
+메뉴별 평점
+
+주변 음식점 랜덤
+
+지도?
+
+DB
+음식점 테이블
+음식점번호(시퀀스처리, 키값), 음식점 이름, 음식점 주소?
+
+메뉴테이블
+메뉴번호(시퀀스,키값),음식점번호(외래키), 메뉴이름, 메뉴사진(기본값 - 사진준비중입니다 사진), 리뷰갯수
+
+리뷰테이블
+리뷰번호(시퀀스,키값), 메뉴번호(외래키), 별점, 한줄리뷰
+
+자동업로드
+tomcat-users.xml까지수정함
+https://chmodi.tistory.com/84
+
+<role rolename="manager-script" />
+        <role rolename="manager-gui" />
+        <role rolename="manager-jmx" />
+        <role rolename="manager-status" />
+        <user username="autoUploader" password="ksaz" roles="manager-script"/>

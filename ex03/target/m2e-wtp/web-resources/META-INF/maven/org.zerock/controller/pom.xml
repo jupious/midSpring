@@ -215,6 +215,7 @@
                     <mainClass>org.test.int1.Main</mainClass>
                 </configuration>
             </plugin>
+   			<!-- 여기에 플러그인 추가해야함 -->
         </plugins>
     </build>
 </project>
