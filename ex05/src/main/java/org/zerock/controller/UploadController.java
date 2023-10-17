@@ -2,7 +2,8 @@ package org.zerock.controller;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,11 +11,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,7 +43,7 @@ public class UploadController {
 		log.info("업로드처리 요청됨..");
 		
 		//해당 날짜의 폴더만들기
-		String uploadFolder = "C:\\upload";
+		String uploadFolder = "C:/upload";
 		File uploadPath = new File(uploadFolder, getFolder());
 		log.info("만들어진 경로: "+uploadPath);
 		
@@ -82,7 +87,7 @@ public class UploadController {
 		List<AttachFileDTO> list = new ArrayList<>();
 		
 		//해당 날짜의 폴더만들기
-		String uploadFolder = "C:\\upload";
+		String uploadFolder = "C:/upload";
 		File uploadPath = new File(uploadFolder, getFolder());
 		log.info("만들어진 경로: "+uploadPath);
 		
@@ -120,7 +125,7 @@ public class UploadController {
 				e.printStackTrace();
 			}
 			//응답내용 만들기
-			AttachFileDTO dto = new AttachFileDTO(oFileName, uploadPath.toString(), uuid, isImg);
+			AttachFileDTO dto = new AttachFileDTO(oFileName, uploadPath.toString().replace("\\", "/"), uuid, isImg);
 			list.add(dto);
 		}
 		return list;
@@ -130,15 +135,15 @@ public class UploadController {
 	@GetMapping("/uploadAjax")
 	public void uploadAjax() {
 		log.info("업로드Ajax 요청됨..");
-		getFolder();
+	//	getFolder();
 	}
 	
 	//현재시점의 년/월/일 리턴
 	private String getFolder() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		Date date = new Date();
 		String dateStr = sdf.format(date);
-		dateStr = dateStr.replace("-", File.separator);
+		//dateStr = dateStr.replace("-", File.separator);
 		log.info("만들어진 경로"+dateStr);
 		return dateStr;
 	}
@@ -167,5 +172,105 @@ public class UploadController {
 	@GetMapping("quiz/quiz2")
 	public void quiz2() {
 		
+	}
+	
+	//썸네일전송
+	@GetMapping(value = "/display")
+	@ResponseBody
+	public ResponseEntity<byte[]> getFile(String fileName) {
+		log.info("보내줄 파일 이름 : "+fileName);
+		String regex = ".*/\\.\\./.*";
+		boolean isFalse = false;
+		ResponseEntity<byte[]> result = null;
+		byte[] doNotHack = "<h1>해킹 금지!</h1>".getBytes();
+		if(fileName.matches(regex) || (!fileName.startsWith("C:/upload/") && !fileName.startsWith("c:/upload/"))) {
+			log.info("어딜들어와");
+			isFalse = true;
+		}else {
+			
+			File file = new File(fileName);
+			log.info("정상경로 요청됨");
+			try {
+				HttpHeaders header = new HttpHeaders();
+				header.add("Content-Type", Files.probeContentType(file.toPath()));
+				
+				result = new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(file),header, HttpStatus.OK);
+				
+			} catch (Exception e) {
+				log.error("잘못된 요청");
+				isFalse = true;
+				
+			}
+		}
+		if(isFalse) {
+			HttpHeaders encode = new HttpHeaders();
+			encode.add("Content-Type", "text/html; charset=utf-8");
+			result = new ResponseEntity<byte[]>(doNotHack,encode,HttpStatus.I_AM_A_TEAPOT);
+		}
+		
+		
+		
+		
+		return result;
+	}
+	
+	//파일 다운로드용
+	@GetMapping(value = "/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@ResponseBody
+	public ResponseEntity<Resource> downloadFile(String fileName) {
+		log.info("다운로드 할 파일 정보 : "+fileName);
+		FileSystemResource resource= new FileSystemResource(fileName);
+		HttpHeaders header = new HttpHeaders();
+		try {
+			String fName = new String(resource.getFilename().getBytes("UTF-8"),"ISO-8859-1");
+			String[] splitName = null;
+			String realName = "";
+			splitName = fName.split("_",2);
+			realName = splitName[1];
+			
+			log.info(realName);
+			header.add("Content-Disposition", "attatchment; filename=" + realName);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		resource.getFilename();
+		return new ResponseEntity<Resource> (resource, header, HttpStatus.OK);
+	}
+	
+	//파일 다운로드용2
+	@GetMapping(value = "/download2")
+	@ResponseBody
+	public ResponseEntity<Resource> downloadFile2(String fileName) {
+		log.info("다운로드 할 파일 정보 : "+fileName);
+		FileSystemResource resource= new FileSystemResource(fileName);
+		HttpHeaders header = new HttpHeaders();
+		try {
+			header.add("Content-Type",MediaType.APPLICATION_OCTET_STREAM_VALUE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		resource.getFilename();
+		return new ResponseEntity<Resource> (resource, header, HttpStatus.OK);
+	}
+	@PostMapping("/deleteFile")
+	@ResponseBody
+	public String deleteFile(String filePath, String fileName, boolean type) {
+		log.info("파일경로 : "+filePath+"파일 타입 이미지? : "+type);
+		
+		File file;
+		String result;
+		try {
+			file = new File(filePath+fileName);
+			file.delete();
+			if(type) {
+				file = new File(filePath+"s_"+fileName);
+				file.delete();
+			}
+			result = "deleteSuccess";
+			} catch (Exception e) {
+			log.info("파일 삭제중 에러 발생");
+			result = "deleteFail";
+		}
+		return result;
 	}
 }

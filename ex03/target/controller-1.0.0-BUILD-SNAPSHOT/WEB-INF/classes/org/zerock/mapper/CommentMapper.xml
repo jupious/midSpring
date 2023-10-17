@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.zerock.mapper.CommentMapper">
+
+	<insert id="insertComm">
+		insert into comments (bno, writer, text, cno) values (#{bno}, #{writer}, #{text}, seq_comment.nextval)
+	</insert>
+
+	<select id="readComm" resultType = "org.zerock.domain.CommentVO">
+		select bno, text, writer, commdate, commupdate, cno, thumbsup, sysdate timenow from comments where bno = #{bno} order by cno
+	</select>
+	
+	
+	<delete id="rmComm">
+		delete from comments where cno = #{cno}
+	</delete>
+	
+	<update id="updateComm">
+		update comments set text = #{text}, commupdate = sysdate where cno = #{cno}
+	</update>
+	
+	<select id="commCount" resultType="long">
+		select count(cno) from comments 
+	</select>
+	
+	<select id="get" resultType="org.zerock.domain.CommentVO">
+	select * from comments where cno=#{cno}
+	</select>
+	
+	<update id="like">
+		update comments set thumbsup = thumbsup+1 where cno = #{cno}
+	</update>
+	
+		
+	<select id="postHaveComm" resultType="long">
+		select count(distinct bno) from comments
+	</select>
+	
+	<select id="commRank" resultType="long">
+		select bno
+		from(select bno, count(*) commcount from comments
+		group by bno order by commcount desc)
+		where rownum = 1
+	</select>
+	
+	<select id="commToday" resultType="org.zerock.domain.CommentVO">
+	select text, writer from comments
+	where to_char(commdate,'yyyymmdd') = to_char(sysdate,'yyyymmdd')
+	order by commdate
+	</select>
+	
+	<select id = "commTodayCount" resultType="org.zerock.domain.ChartVO">
+		select count(*) data, sysdate dateTime from comments
+		where to_char(commdate,'yyyymmdd') = to_char(sysdate,'yyyymmdd')
+		order by commdate
+	</select>
+	
+	<select id = "getPopular" resultType="org.zerock.domain.BoardVO">
+	<![CDATA[
+	select rank, t1.bno, title, commcount
+	from(select rownum rank, bno, commcount 
+		from(select bno, count(*) commcount
+			 from(select * from comments
+				  where (sysdate - commdate)*24 < 1)
+			 group by bno
+			 order by commcount desc)
+		where rownum <=10) t1 left join tbl_board t2 on (t1.bno = t2.bno) ]]>
+	</select>
+	
+	<delete id="deleteCommOnPost">
+		delete from comments where bno = #{bno}
+	</delete>
+	
+</mapper>

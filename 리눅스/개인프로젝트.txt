@@ -23,3 +23,5 @@ https://chmodi.tistory.com/84
         <role rolename="manager-jmx" />
         <role rolename="manager-status" />
         <user username="autoUploader" password="ksaz" roles="manager-script"/>
+			아이디		   비번
+

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.zerock.mapper.BoardMapper">	<!-- namespace - 해당 인터페이스를 매핑 -->
+	<!-- 내용에 대해 id를 지정하고 id를 이용해서 쿼리 삽입을 지원 -->
+	<sql id="criteria">
+		<trim prefix="(" suffix=") AND "  prefixOverrides="OR">
+			<foreach collection = "typeArr" item = "type">
+				<trim prefix = "OR">
+					<choose>
+						<when test = 'type=="T"'>
+							title like '%'||#{keyword}||'%'
+						</when>
+						<when test = 'type=="C"'>
+							content like '%'||#{keyword}||'%'
+						</when>
+						<when test = 'type=="W"'>
+							writer like '%'||#{keyword}||'%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+	
+	<!-- id = 메소드 이름 -->
+	<select id="getList" resultType = "org.zerock.domain.BoardVO">	<!-- 리스트 한 행의 반환타입지정 -->
+		select * from tbl_board order by bno desc
+	</select>
+	
+	<select id="getListWithPaging" resultType = "org.zerock.domain.BoardVO">	
+		<![CDATA[
+		select t1.bno,title, writer, regdate, updatedate, commcount
+		from(
+		select bno,title, writer, regdate, updatedate
+		from(select /*+index_desc(tbl_board tbl_board_pk)*/
+		            rownum rn,bno,title,writer, regdate, updatedate 
+		            from tbl_board where 
+		]]>
+		<include refid="criteria" />
+		<![CDATA[ 	rownum <= (#{amount} * #{pageNum}))
+		where rn > (#{pageNum} - 1) * #{amount} ) t1 left join (select bno, count(*) commcount from comments
+		group by bno) t2 on (t1.bno = t2.bno) order by bno desc
+		]]>
+	</select>
+	
+	<select id = "read" resultType = "org.zerock.domain.BoardVO">
+		select * from TBL_BOARD where bno = #{bno}
+	</select>
+	
+	<insert id="insert">
+		insert into tbl_board(bno, title, content, writer) values(seq_board.nextval, #{title}, #{content}, #{writer})
+	</insert>
+	
+	<insert id="insertSelectKey">
+		<selectKey keyProperty = "bno" order="BEFORE" resultType="long">
+			select seq_Board.nextval from dual
+		</selectKey>
+		insert into tbl_board(bno, title, content, writer) values(#{bno}, #{title}, #{content}, #{writer})
+	</insert>
+	
+	<update id="update">
+		update tbl_board set title = #{title}, content = #{content}, updatedate = sysdate where bno = #{bno}
+	</update>
+	
+	<delete id="delete">
+		delete from tbl_board where bno = #{bno}
+	</delete>
+	
+	<select id="rank" resultType = "org.zerock.domain.RankVO">
+		<![CDATA[
+			select *
+			from (select writer, count(writer) counter
+		        from tbl_board
+		        group by writer
+		        order by counter DESC)
+			where ROWNUM <= 5
+		]]>
+	</select>
+	
+	<select id="rankAll" resultType = "org.zerock.domain.RankVO">
+		select writer, count(writer) counter
+		        from tbl_board
+		        group by writer
+		        order by counter DESC
+	</select>
+	
+	<select id = "avgPost" resultType = "double">
+		select avg(counter)
+		from(select writer, count(writer) counter
+		        from tbl_board
+		        group by writer)
+	</select>
+	
+	<select id="count" resultType = "long">
+		select count(bno) from tbl_board where
+		<include refid="criteria" />
+		bno > 0
+	</select>
+	
+	<select id="lastBoard" resultType = "org.zerock.domain.BoardVO">
+		<![CDATA[
+			select *
+			from(select * from tbl_board 
+			     order by updatedate desc)
+			where rownum <6
+		]]>
+	</select>
+	
+	<select id="postCount" resultType="org.zerock.domain.PostAtTimeVO">
+		select "time", count("time") "count"
+		from(select to_char(regdate, 'hh24') "time"
+		    from tbl_board)
+		group by "time"
+		order by "time"
+	</select>
+	
+	<select id = "postCountDay" resultType="org.zerock.domain.PostAtTimeVO">
+		select "day", count("day") "count"
+		from(select to_char(regdate, 'day') "day"
+		from tbl_board)
+		group by "day"
+		order by CASE "day" 
+		    WHEN '월요일' THEN 1
+		    WHEN '화요일' THEN 2
+		    WHEN '수요일' THEN 3
+		    WHEN '목요일' THEN 4
+		    WHEN '금요일' THEN 5
+		    WHEN '토요일' THEN 6
+		    WHEN '일요일' THEN 7
+		    END ASC
+	</select>
+	
+
+	
+
+	
+<!-- 	<select id="kingUser" resultType="string"> -->
+<!-- 		select * -->
+<!-- 		from(select writer, count(writer)  -->
+<!-- 		        from tbl_board -->
+<!-- 		        group by writer -->
+<!-- 		        having count(writer) = (select max(count(writer)) -->
+<!-- 		                                from tbl_board -->
+<!-- 		                                group by writer)) -->
+<!-- 		where rownum = 1; -->
+<!-- 	</select> -->
+	
+</mapper>

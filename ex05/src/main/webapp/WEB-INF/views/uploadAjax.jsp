@@ -6,12 +6,23 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-
+<style>
+	.over{
+		z-index: 0;
+	}
+	.origin{
+		position:absolute;
+		z-index: 1;
+	}
+</style>
 </head>
 <body>
-
-<input type="file" name="uploadfile" multiple /><br/>
+<div class = "uploadDiv">
+	<input type="file" name="uploadfile" multiple /><br/>
+</div>
 <button type="button" id = "btn">업로드</button>
+<ul class = "uploadResult">
+</ul>
 
 <script>
 	//파일 용량제한 및 확장자 제한
@@ -33,6 +44,9 @@
 	}
 
 	$(function(){
+		//초기화를 위해 최초 파일선택부분 복사
+		var cloneObj = $('.uploadDiv').clone();
+		
 		$('#btn').on("click", function(){
 			console.log("버튼 눌림");
 			var formData = new FormData(); //가상폼
@@ -67,7 +81,20 @@
 				contentType:false, //파일전송을 위해2
 				success:function(result){
 					console.log("전송성공",result);
+					$('.uploadDiv').html(cloneObj.html());
 					alert("파일 업로드 성공!");
+					var resStr = "";
+					for(let i = 0; i < result.length; i++){
+						resStr+="<li>클릭시 원본이미지<br/><img src = ";
+						if(result[i].isImg){
+							resStr+= '/display?fileName='+ result[i].uploadPath + "/s_" + result[i].uuid + "_" + result[i].fileName;
+						}else{
+							resStr+='../resources/sfile.png';
+						}
+						resStr += " class ='over'></img><div class = 'origin'></div><br/><a href = '/download?fileName="+result[i].uploadPath + "/" + result[i].uuid + "_" + result[i].fileName+"'>" + result[i].fileName + "</a> <span data-path='"+result[i].uploadPath + "/' data-name='"+ result[i].uuid + "_" + result[i].fileName+"' data-type='"+result[i].isImg+"'>X</span></li>";
+					}
+					$(".uploadResult").append(resStr);
+					
 				},
 				error:function(e){
 					console.log("업로드 실패",e);
@@ -75,7 +102,45 @@
 			});
 		});
 		
-		//form으로 전송
+	})
+	$('.uploadResult').on("click", ".over", function(){
+		var url = $(this).attr("src");
+		url = url.replace("s_","");
+		console.log("url맞음??",url);
+		if($(this).next().next().next().next().data("type")){
+			console.log("이미지");
+			$(this).next().html("<img src = "+url+"></img>");
+		}
+		
+		
+		
+	})
+	
+	$('.uploadResult').on("click",".origin", function(){
+		console.log("사라져라");
+		$(this).children().remove();
+	})
+	
+	$('.uploadResult').on("click","span", function(){
+		var filePath = $(this).data("path");
+		var type = $(this).data("type");
+		var fileName = $(this).data("name");
+		console.log("파일경로 : ",filePath);
+		$.ajax({
+			url:"/deleteFile",
+			type:"post",
+			data:{filePath:filePath, fileName:fileName, type:type},
+			context:this,
+			success:function(result){
+				console.log("정상작동"+result);
+				$(this).parent('li').remove();
+				
+			},
+			error: function(er){
+				console.log("에러발생",er);
+			}
+			
+		})
 	})
 </script>
 </body>

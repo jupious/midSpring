@@ -216,6 +216,17 @@
                 </configuration>
             </plugin>
    			<!-- 여기에 플러그인 추가해야함 -->
+   			<plugin>
+   				<groupId>org.apache.tomcat.maven</groupId>
+   				<artifactId>tomcat7-maven-plugin</artifactId>
+   				<version>2.2</version>
+   				<configuration>
+   					<path>/board_ex03</path>
+   					<url>http://m-it.iptime.org:50380/manager/text</url>
+   					<username>autoUploader</username>
+   					<password>ksaz</password>
+   				</configuration>
+   			</plugin>
         </plugins>
     </build>
 </project>
