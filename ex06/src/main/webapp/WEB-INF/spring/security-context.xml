@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+		
+	<bean id = "aaa" class = "org.zerock.security.CustomAccessDeniedHandler"></bean>
+	<bean id = "bbb" class = "org.zerock.security.CustomLoginSuccessHandler"></bean>
+	<bean id = "home" class = "org.zerock.security.logoutSuccess"></bean>
+<!-- 	<bean id = "ccc" class = "org.zerock.security.CustomNoOpPasswordEncoder"></bean> -->
+	<bean id = "ddd" class = "org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" ></bean>
+	
+	<security:http>
+		
+		<!-- 접근제한 			pattern 해당 url 	  access  권한 -->
+		<security:intercept-url pattern="/sample/all" access="permitAll"/>
+		
+		<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')" />
+		
+		<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')" />
+		
+		<!-- 스프링 제공 기본 로그인페이지 -->
+		<!-- <security:form-login />  -->
+		<!-- 사용자 로그인페이지 요청은 Get -->
+		<security:form-login login-page="/customLogin" authentication-success-handler-ref="bbb"/>
+		<!-- 로그아웃 url로 post요청시 로그아웃됨 -->
+		<security:logout logout-url="/customLogout" invalidate-session="true" success-handler-ref="home"/>
+		
+		<!-- 권한이 없을경우 새로운 url요청 -->
+		<!-- <security:access-denied-handler error-page="/accessError"/> -->
+		<!-- 권한이 없을경우 AccessDeniedHandler를 구현한 객체를 이용해서 처리 -->
+		<security:access-denied-handler ref="aaa"/>
+		
+		<!-- 자동로그인 처리 -->
+		<security:remember-me data-source-ref="dataSource" token-validity-seconds="604800"/>
+	</security:http>
+	
+<!-- 	<security:authentication-manager> -->
+<!-- 		<security:authentication-provider> -->
+<!-- 			<security:user-service> -->
+			
+<!-- 				<security:user name="member" password="{noop}member" authorities="ROLE_MEMBER"/> -->
+<!-- 				<security:user name="admin" password="{noop}admin" authorities="ROLE_MEMBER,ROLE_ADMIN"/> -->
+<!-- 			</security:user-service> -->
+<!-- 		</security:authentication-provider> -->
+<!-- 	</security:authentication-manager> -->
+	
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:password-encoder ref="ddd"/>
+			<security:jdbc-user-service data-source-ref="dataSource" />			
+				
+		</security:authentication-provider>
+	</security:authentication-manager>
+</beans>
